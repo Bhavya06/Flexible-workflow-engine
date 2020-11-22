@@ -10,7 +10,7 @@
 - [ ] Clear log button
 - [x] Make it flexible during run time
 - [x] Show the token for each user executing in the workflow
-- [ ] Introduce random delay and tabulate based on delay
+- [X] Introduce random delay and tabulate based on delay
 - [ ] Multipath - based on number of jobs
 - [ ] Org and user authentication
 - [ ] Pop up tool for task
