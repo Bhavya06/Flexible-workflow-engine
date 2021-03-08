@@ -1,0 +1,1 @@
+I want to make a @workflow: Student Declaration Submission. The first @Task: ABC and @Time: 8 sec. Next @Task: PQR and @Time: 7 sec. Third @Task: TUV and @Time: 4 sec. Final @Task: XYZ and @Time: 3 sec.

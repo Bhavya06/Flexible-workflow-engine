@@ -6,6 +6,7 @@ from time import sleep
 from multiprocessing import Process, Manager
 import threading
 import concurrent.futures
+import multiprocessing
 
 from flask_cors import CORS, cross_origin
 
@@ -54,15 +55,15 @@ operatorI = 0
 operator_data={}
 global task_user
 task_user = {}
-global task_no 
-task_no = 1
-
+manager = multiprocessing.Manager()
+final_list = manager.list()
+workflow_name = "TEST"
+globals()[workflow_name] = Engine(workflow_name, 'NULL', 'NULL', 0, 'NULL', [], False)
+myeng = eval(workflow_name)
+final_list.append(myeng)
 
 @app.route("/start",methods=["GET"])
 def start():
-    workflow_name = "TEST"
-    globals()[workflow_name] = Engine(workflow_name, 'NULL', 'NULL', 0, 'NULL', [], False)
-    myeng = eval(workflow_name)
     global result
     result ={}
     result['operators'] = {}
@@ -72,8 +73,8 @@ def start():
 @app.route("/add_operator",methods=["POST"])
 @cross_origin(supports_credentials=True)
 def add_operator():
-    workflow_name = "TEST"
-    myeng = eval(workflow_name)
+    # workflow_name = "TEST"
+    # myeng = eval(workflow_name)
     global result
     global operatorI
     global operator_data
@@ -116,8 +117,8 @@ def add_operator():
 @app.route("/add_link",methods=["POST"])
 @cross_origin(supports_credentials=True)
 def add_link():
-    workflow_name = "TEST"
-    myeng = eval(workflow_name)
+    # workflow_name = "TEST"
+    # myeng = eval(workflow_name)
     global result
     rf=request.form
     for key in rf.keys():
@@ -177,8 +178,8 @@ def change_title():
 @app.route("/add_priority_user",methods=["POST"])
 def add_priority_user():
     #'User3'
-    workflow_name = "TEST"
-    myeng = eval(workflow_name)
+    # workflow_name = "TEST"
+    # myeng = eval(workflow_name)
     rf=request.form
     for key in rf.keys():
         data=key
@@ -194,8 +195,8 @@ def add_priority_user():
 
 @app.route("/delete_operator",methods=["DELETE"])
 def delete_operator():
-    workflow_name = "TEST"
-    myeng = eval(workflow_name)
+    # workflow_name = "TEST"
+    # myeng = eval(workflow_name)
     global result
     rf=request.form
     for key in rf.keys():
@@ -249,10 +250,9 @@ global user_count
 user_count = 1
 
 def execute_node(current_node, user_name):
-    #global task_no
     print(current_node.title, user_name)
-    workflow_name = "TEST"
-    myeng = eval(workflow_name)
+    # workflow_name = "TEST"
+    # myeng = eval(workflow_name)
     if(current_node.is_executing == False):
         prev_link = current_node.input
         # if(prev_link=='NULL'):
@@ -281,21 +281,6 @@ def execute_node(current_node, user_name):
                 current_node.executing_user = 'NULL'
                 current_node.fin_executed.append(not_exec)
                 current_node.jobs-=1 
-                old_user_name = user_name
-                if(current_node.not_executed!=[]):
-                    user_name = current_node.not_executed[0]
-                current_node.is_executing = False
-                if(current_node.output!= 'NULL'):
-                    #p = 'p'+str(task_no)
-                    #while(current_node != 'NULL'):
-                    with concurrent.futures.ThreadPoolExecutor() as executer:
-                        future = executer.submit(execute_node, current_node.output.toOperator ,old_user_name )
-                        task_user[current_node.output.toOperator.title].remove(old_user_name)
-                        #print("^^^^^^^^^")
-                        value = yield from future.result()
-                        if(value is not None):
-                            yield "data: %s\n\n" % (value)            
-                    #task_no+=1
         else:
             #print("IN ELSE")
             prev_node = prev_link.fromOperator
@@ -323,21 +308,9 @@ def execute_node(current_node, user_name):
                     current_node.fin_executed.append(not_exec)
                     current_node.executing_user = 'NULL'
                     current_node.jobs-=1 
-                    old_user_name = user_name
                     if(current_node.not_executed!=[]):
                         user_name = current_node.not_executed[0]
                     current_node.is_executing = False
-                    if(current_node.output!= 'NULL'):
-                        #p = 'p'+str(task_no)
-                        #while(current_node != 'NULL'):
-                        with concurrent.futures.ThreadPoolExecutor() as executer:
-                            future = executer.submit(execute_node, current_node.output.toOperator , old_user_name )
-                            task_user[current_node.output.toOperator.title].remove(old_user_name)
-                            #print("^^^^^^^^^")
-                            value = yield from future.result()
-                            if(value is not None):
-                                yield "data: %s\n\n" % (value)            
-                        #task_no+=1
                     
         current_node.is_executing = False
         if(myeng.last_node.is_executing==True or myeng.last_node.not_executed!=[]):
@@ -352,9 +325,9 @@ def execute_engine():
     if request.headers.get('accept') == 'text/event-stream':   
         def events():           
             val = ''
-            workflow_name = "TEST"
-            myeng = eval(workflow_name)
-            current_node = myeng.start_node 
+            # workflow_name = "TEST"
+            # myeng = eval(workflow_name)
+            current_node = final_list[0].start_node 
             global user_count
             last_user = ''
             start = 0
@@ -396,40 +369,48 @@ def execute_engine():
                     break
             user_count+=1  
             global result 
-            workflow_name = "TEST"
-            myeng = eval(workflow_name)
+            # workflow_name = "TEST"
+            # myeng = eval(workflow_name)
             val = "Started execution of Workflow Engine"+" "+myeng.name+"\n"
             #print("IS EXECUTING", myeng.is_executing)
             yield "data: %s\n\n" % (val)
-            time.sleep(0.1)
+            time.sleep(2)
             print("Started execution of Workflow Engine"+" "+myeng.name)
-            current_node = myeng.start_node
-            #task_no = 1
-            #p = 'p'+str(task_no)
-            #while(current_node != 'NULL'):
-            with concurrent.futures.ThreadPoolExecutor() as executer:
-                future = executer.submit(execute_node, current_node,task_user[current_node.title][0] )
-                task_user[current_node.title].pop(0)
-                #print("^^^^^^^^^")
-                value = yield from future.result()
-                if(value is not None):
-                    yield "data: %s\n\n" % (value)            
-            #task_no+=1
-            #    p = 'p'+str(task_no)
-                             
-            #     if(current_node.output!='NULL'):
-            #         next_link = current_node.output
-            #         current_node = next_link.toOperator
-            #     else:
-            #         break
-
-            # print("Finished execution of Workflow engine"+" "+myeng.name)
-            # val = "Finished execution of Workflow Engine"+" "+myeng.name+"\n"
-            # yield "data: %s\n\n" % (val)
-            # time.sleep(2)  # an artificial delay 
-            # val = ' '  
-            # yield "data: %s\n\n" % (val)
-            # time.sleep(2) 
+            current_node = final_list[0].start_node
+            task_no = 1
+            p = 'p'+str(task_no)
+            while(current_node != 'NULL'):
+                globals()[p] = Process(target=execute_node, args=(current_node,))
+                # globals()[p] = threading.Thread(target=execute_node, args=(current_node,))
+                eval(p).start()
+                eval(p).join()
+                # with concurrent.futures.ThreadPoolExecutor() as executer:
+                #     future = executer.submit(execute_node, current_node,task_user[current_node.title][0] )
+                #     task_user[current_node.title].pop(0)
+                #     #print("^^^^^^^^^")
+                #     value = yield from future.result()
+                #     if(value is not None):
+                #         yield "data: %s\n\n" % (value)            
+                task_no+=1
+                p = 'p'+str(task_no)
+                #value = yield from execute_node(current_node) 
+                #yield "data: %s\n\n" % (value)              
+                if(current_node.output!='NULL'):
+                    #print(current_node.title, current_node.output.id, current_node.output.toOperator)
+                    #print("IS EXECUTING", myeng.is_executing)
+                    next_link = current_node.output
+                    current_node = next_link.toOperator
+                    #print("_______", current_node.title)
+                else:
+                    break
+            #print("IS EXECUTING", myeng.is_executing)
+            print("Finished execution of Workflow engine"+" "+myeng.name)
+            val = "Finished execution of Workflow Engine"+" "+myeng.name+"\n"
+            yield "data: %s\n\n" % (val)
+            time.sleep(2)  # an artificial delay 
+            val = ' '  
+            yield "data: %s\n\n" % (val)
+            time.sleep(2) 
             #yield "data: END-OF-WORKFLOW\n\n"                     
         return Response(events(), content_type='text/event-stream')
     return redirect(url_for('static', filename='demo.html'))
@@ -438,8 +419,8 @@ def execute_engine():
 
 @app.route("/calculate_time",methods=["GET"])  
 def calculate_time():
-    workflow_name = "TEST"
-    myeng = eval(workflow_name)
+    # workflow_name = "TEST"
+    # myeng = eval(workflow_name)
     current_node = myeng.start_node
     myeng.total_time = 0
     while(current_node != 'NULL'):

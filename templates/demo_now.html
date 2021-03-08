@@ -148,35 +148,12 @@
             font-size: 18px;
         }
         
-        .query1 {
+        .choose-file {
             margin-top: 10px;
             margin-left: 1100px;
-            /* margin-right:600px; */
-            font-family: "Times New Roman", Times, serif;
-            font-size: 18px;
-        }
-        
-        .query2 {
-            top: 15px;
-            margin-left: 1100px;
-            /* margin-right:600px; */
-            font-family: "Times New Roman", Times, serif;
-            font-size: 18px;
-        }
-        
-        .choose-file {
-            top: 596px;
-            left: 1px;
-            position: absolute;
-            /* margin-right:600px; */
+            /* margin-right:600px */
             /* font-family: "Times New Roman", Times, serif; */
             /* font-size:18px; */
-        }
-        
-        .choose-file-submit {
-            top: 2px;
-            left: 300px;
-            position: absolute;
         }
         
         .title-logs {
@@ -195,7 +172,7 @@
         .create-task {
             font-family: "Times New Roman", Times, serif;
             margin-left: 10px;
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 16px;
         }
         
@@ -206,22 +183,6 @@
             /* right: 250px; */
             font-family: "Times New Roman", Times, serif;
             font-size: 34px;
-        }
-        
-        .query1_data {
-            top: 470px;
-            margin-left: 1100px;
-            font-size: 24px;
-            position: absolute;
-            font-family: "Times New Roman", Times, serif
-        }
-        
-        .query2_data {
-            top: 500px;
-            margin-left: 1100px;
-            font-size: 24px;
-            position: absolute;
-            font-family: "Times New Roman", Times, serif
         }
         
         .textbox {
@@ -286,36 +247,30 @@
         </div>
 
     </div>
-    <button class="btn btn-primary margin-but" id="text_submit">Upload File</button>
+    <!-- <button class="btn btn-primary margin-but" id="text_submit">Upload File</button> -->
     <span class="priority-user">
         <label for="priority_user">Priority User: </label><input id="priority_user" type="text">
     </span>
     <button class="btn btn-primary" id="priority_submit">Add</button>
-    <span class="query1">
-        <label for="query1">No.of users: </label><input id="query1" type="text">
-    </span>
-    <button class="btn btn-primary" id="query1_submit">Add</button>
-    <span class="query2">
-        <label for="query2">Total time: </label><input id="query2" type="text">
-    </span>
-    <button class="btn btn-primary" id="query2_submit">Add</button>
-    <h4 class="query1_data" id="query1_data">{{query1_data}}</h4>
-    <h4 class="query2_data" id="query2_data">{{query2_data}}</h4>
     <span id="operator_properties" style="display: block;" class="create-task">
         <label for="operator_title">Task's title: </label><input id="operator_title" type="text">
         <label for="operator_time">Task's time: </label><input id="operator_time" type="text">
     </span>
     <!--<button class="set_data" id="set_data">Set data</button>-->
-    <span class="choose-file">	
-        <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">	
-            <input class="btn btn-primary margin-but" type="file" name="file" />	
-            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>	
-        </form>	
-        <h4>	
-            <div id="display_time" class="time"></div>	
-        </h4>	
+    <span class="choose-file">
+        <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data" id="todo-form">
+            <input class="btn btn-primary choosefile margin-but" type="file" name="file" />
+            <input type="submit" id="text_submit" class="btn btn-primary margin-but" />
+        </form>
+
+        <h4>
+            <div id="display_time" class="time"></div>
+        </h4>
     </span>
 
+    <!-- <div>
+        <textarea rows="5" cols="40" id="flowchart_data" class="textbox"></textarea>
+    </div> -->
     <script type="text/javascript">
         /* global $ */
         var displaydata = '';
@@ -335,6 +290,21 @@
 
         let status = "stopped";
         var Worktasks = {};
+
+        $(document).on('submit', '#todo-form', function(e) {
+            console.log('hello');
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/',
+                data: {
+                    todo: $("#text_submit").val()
+                },
+                success: function() {
+                    alert('saved');
+                }
+            })
+        });
 
 
         var modal = document.getElementById("myModal");
@@ -365,10 +335,10 @@
             }
         }
 
-        // function Display_logs() {
-        //     document.getElementById("display_data").innerHTML = displaydata;
-        //     disp = 1;
-        // }
+        //function Display_logs() {
+        //    document.getElementById("display_data").innerHTML = displaydata;
+        //    disp = 1;
+        //}
 
         function Stopwatch() {
 
@@ -464,15 +434,12 @@
             //-----------------------------------------
             //--- operator and link properties
             //--- start
-
             var $operatorProperties = $('#operator_properties');
             $operatorProperties.hide();
             var $linkProperties = $('#link_properties');
             $linkProperties.hide();
             var $operatorTitle = $('#operator_title');
             var $priorityUser = $('#priority_user');
-            var $query1 = $('#query1');
-            var $query2 = $('#query2');
             var $operatorTime = $('#operator_time');
             var $linkColor = $('#link_color');
 
@@ -547,44 +514,6 @@
 
             var dict1 = [];
 
-            function Query1() {
-                query1_dict = {};
-                query1_dict['no_of_users'] = $query1.val();
-
-                $.ajax({
-                    type: "POST",
-                    url: 'http://localhost:5000/query1',
-                    data: JSON.stringify(query1_dict),
-                    dataType: 'json'
-                }).done(function(returndata) {
-                    query1_data = "Estimated time for " + $query1.val() + " users is " + returndata['total_time'] + " sec";
-                    document.getElementById("query1_data").innerHTML = query1_data;
-                    $query1.val() = '';
-                })
-            };
-
-
-            $('#query1_submit').click(Query1);
-
-            function Query2() {
-                query2_dict = {};
-                query2_dict['total_time'] = $query2.val();
-
-                $.ajax({
-                    type: "POST",
-                    url: 'http://localhost:5000/query2',
-                    data: JSON.stringify(query2_dict),
-                    dataType: 'json'
-                }).done(function(returndata) {
-                    query2_data = "Estimated no.of users for " + $query2.val() + " sec is " + returndata['finished_users'];
-                    document.getElementById("query2_data").innerHTML = query2_data;
-                    $query2.val() = '';
-                })
-            };
-
-            $('#query2_submit').click(Query2);
-
-
 
             function Submit_text_file() {
                 //Reading the file
@@ -602,6 +531,7 @@
                     console.log(task_data)
                     link_data = returndata['ld'];
                     t = task_data.split(" ");
+                    //document.getElementById("display_data").innerHTML = t;
                     var i1 = 0;
                     //console.log("--------",t.length);
                     while (i1 < t.length) {
@@ -652,9 +582,6 @@
 
             $('#text_submit').click(Submit_text_file);
 
-
-            var taskoper = {}
-
             function create_task(name1, time1) {
                 $.ajax({
                     type: "POST",
@@ -663,11 +590,9 @@
                     var operatorId = operator_data['operatorId']['name'];
                     var operatorData = operator_data['operatorData'];
                     dict1[name1] = operatorId;
-                    //console.log("--------", operatorId, operatorData)
+                    console.log("--------", operatorId, operatorData)
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
                     change_title_task(operatorId, name1, time1)
-                    console.log("Here is what we got", name1, operatorId);
-                    taskoper[name1] = operatorId
                 });
             }
 
@@ -697,7 +622,6 @@
             //-----------------------------------------
             //--- delete operator / link button
             //--- start
-
             $flowchart.parent().siblings('.delete_selected_button').click(function() {
                 //console.log($("#operator_properties"));
                 $flowchart.flowchart('deleteSelected');
@@ -711,9 +635,7 @@
             //-----------------------------------------
             //--- create operator button
             //--- start
-
             var posoftask = 0;
-
             $flowchart.parent().siblings('.create_operator').click(function() {
                 $.ajax({
                     type: "POST",
@@ -721,10 +643,11 @@
                 }).done(function(operator_data) {
                     var operatorId = operator_data['operatorId']['name'];
                     var operatorData = operator_data['operatorData'];
-                    var name1 = operatorData['properties']['title'].split(" ");
+                    console.log(operatorData);
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
-                    console.log("Here is what we got", name1[0], operatorId);
-                    taskoper[name1[0]] = operatorId
+                    //var data = $flowchart.flowchart('getData');
+                    //data.operators[operatorId].left = data.operators[operatorId].left + posoftask;
+                    //posoftask = posoftask + 20;
                 });
             });
             //--- end
@@ -852,22 +775,20 @@
 
                     if (res[0] == "Started" && res[3] != "Workflow") {
                         //console.log("You there??")
-                        //Worktasks[taskname] = The position of that task
                         if (!(res[3] in Worktasks)) {
                             Worktasks[res[3]] = indexoftasks;
                             indexoftasks++;
                             console.log(Worktasks);
                         }
                         //task id
-                        var operatorId = taskoper[res[3]];
+                        var operatorId = 'created_operator_' + (parseInt(Worktasks[res[3]]));
                         var time = parseInt(res[6]);
                         userstart(operatorId, parseInt(res[10][4]), time);
                     } else if (res[0] == "Finished" && res[3] != "Workflow") {
                         userend(parseInt(res[10][4]));
-                        dict[res[10][4]] = taskoper[res[3]];
-                        console.log("This is for delay", dict);
+                        dict[res[10][4]] = parseInt(Worktasks[res[3]]) + 1;
                     } else if (res[0] == "STARTED" && res[1] == "DELAY") {
-                        var operatorId = dict[res[6][4]];
+                        var operatorId = 'created_operator_' + (dict[res[6][4]] - 1);
                         var countdown = parseInt(res[3]);
                         userdelaystart(operatorId, parseInt(res[6][4]), countdown)
                     } else if (res[0] == "FINISHED" && res[1] == "DELAY") {

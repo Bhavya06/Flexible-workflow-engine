@@ -54,8 +54,6 @@ operatorI = 0
 operator_data={}
 global task_user
 task_user = {}
-global task_no 
-task_no = 1
 
 
 @app.route("/start",methods=["GET"])
@@ -249,8 +247,8 @@ global user_count
 user_count = 1
 
 def execute_node(current_node, user_name):
-    #global task_no
     print(current_node.title, user_name)
+    global
     workflow_name = "TEST"
     myeng = eval(workflow_name)
     if(current_node.is_executing == False):
@@ -270,32 +268,20 @@ def execute_node(current_node, user_name):
                 current_node.executing_user = not_exec
                 current_node.is_executing = True
                 val = "Started execution of" +" "+current_node.title+" for "+not_exec+ "\n"
-                yield "data: %s\n\n" % (val)
-                time.sleep(0.1)
+                # yield "data: %s\n\n" % (val)
+                # time.sleep(0.1)
                 print("Started execution of" +" "+current_node.title+" for "+not_exec)
                 time.sleep(current_node.time)
                 val = "Finished execution of" +" "+current_node.title+" for "+not_exec+ "\n"
-                yield "data: %s\n\n" % (val)
-                time.sleep(0.1)
+                # yield "data: %s\n\n" % (val)
+                # time.sleep(0.1)
                 print("Finished execution of" +" "+current_node.title+" for "+not_exec)
                 current_node.executing_user = 'NULL'
                 current_node.fin_executed.append(not_exec)
                 current_node.jobs-=1 
-                old_user_name = user_name
                 if(current_node.not_executed!=[]):
                     user_name = current_node.not_executed[0]
                 current_node.is_executing = False
-                if(current_node.output!= 'NULL'):
-                    #p = 'p'+str(task_no)
-                    #while(current_node != 'NULL'):
-                    with concurrent.futures.ThreadPoolExecutor() as executer:
-                        future = executer.submit(execute_node, current_node.output.toOperator ,old_user_name )
-                        task_user[current_node.output.toOperator.title].remove(old_user_name)
-                        #print("^^^^^^^^^")
-                        value = yield from future.result()
-                        if(value is not None):
-                            yield "data: %s\n\n" % (value)            
-                    #task_no+=1
         else:
             #print("IN ELSE")
             prev_node = prev_link.fromOperator
@@ -312,32 +298,20 @@ def execute_node(current_node, user_name):
                     current_node.executing_user = not_exec
                     current_node.is_executing = True
                     val = "Started execution of" +" "+current_node.title+" for "+not_exec+ "\n"
-                    yield "data: %s\n\n" % (val)
-                    time.sleep(0.1)
+                    # yield "data: %s\n\n" % (val)
+                    # time.sleep(0.1)
                     print("Started execution of" +" "+current_node.title+" for "+not_exec)
                     time.sleep(current_node.time)
                     val = "Finished execution of" +" "+current_node.title+" for "+not_exec+ "\n"
-                    yield "data: %s\n\n" % (val)
-                    time.sleep(0.1)
+                    # yield "data: %s\n\n" % (val)
+                    # time.sleep(0.1)
                     print("Finished execution of" +" "+current_node.title+" for "+not_exec)
                     current_node.fin_executed.append(not_exec)
                     current_node.executing_user = 'NULL'
                     current_node.jobs-=1 
-                    old_user_name = user_name
                     if(current_node.not_executed!=[]):
                         user_name = current_node.not_executed[0]
                     current_node.is_executing = False
-                    if(current_node.output!= 'NULL'):
-                        #p = 'p'+str(task_no)
-                        #while(current_node != 'NULL'):
-                        with concurrent.futures.ThreadPoolExecutor() as executer:
-                            future = executer.submit(execute_node, current_node.output.toOperator , old_user_name )
-                            task_user[current_node.output.toOperator.title].remove(old_user_name)
-                            #print("^^^^^^^^^")
-                            value = yield from future.result()
-                            if(value is not None):
-                                yield "data: %s\n\n" % (value)            
-                        #task_no+=1
                     
         current_node.is_executing = False
         if(myeng.last_node.is_executing==True or myeng.last_node.not_executed!=[]):
@@ -345,92 +319,111 @@ def execute_node(current_node, user_name):
         else:
             myeng.is_executing=False
     
+global new_call
+new_call =0 
 
 @app.route("/execute_engine",methods=["GET"])  
 def execute_engine(): 
     global task_user
+    global new_call
     if request.headers.get('accept') == 'text/event-stream':   
         def events():           
             val = ''
             workflow_name = "TEST"
             myeng = eval(workflow_name)
-            current_node = myeng.start_node 
-            global user_count
-            last_user = ''
-            start = 0
-            while(current_node != 'NULL'):
-                current_node.jobs+=1
-                if('User'+str(user_count) in myeng.priority_users):
-                    if(start==0):
-                        if(current_node.not_executed !=[]):
-                            last_user = current_node.not_executed[0]
+            global new_call
+            with Manager() as manager:
+                global l
+                if(new_call == 0):
+                    l = manager.list()
+                    l.append(myeng)
+                    new_call+=1
+                print(l)
+                print(l[0],'--------------')
+                current_node = l[0].start_node 
+                global user_count
+                last_user = ''
+                start = 0
+                while(current_node != 'NULL'):
+                    current_node.jobs+=1
+                    if('User'+str(user_count) in l[0].priority_users):
+                        if(start==0):
+                            if(current_node.not_executed !=[]):
+                                last_user = current_node.not_executed[0]
+                            else:
+                                last_user = ''
+                            current_node.not_executed.insert(0,'User'+str(user_count))
+                            if(current_node.title not in task_user):
+                                task_user[current_node.title] = ['User'+str(user_count)]
+                            else:
+                                task_user[current_node.title].insert(0, 'User'+str(user_count))
+                            start=1
                         else:
-                            last_user = ''
-                        current_node.not_executed.insert(0,'User'+str(user_count))
+                            if(last_user != ''):
+                                ind = current_node.not_executed.index(last_user)
+                            else:
+                                ind = 0
+                            current_node.not_executed.insert(ind,'User'+str(user_count))
+                            if(current_node.title not in task_user):
+                                task_user[current_node.title] = ['User'+str(user_count)]
+                            else:
+                                task_user[current_node.title].insert(ind, 'User'+str(user_count))
+
+                    else:
+                        current_node.not_executed.append('User'+str(user_count))
                         if(current_node.title not in task_user):
                             task_user[current_node.title] = ['User'+str(user_count)]
                         else:
-                            task_user[current_node.title].insert(0, 'User'+str(user_count))
-                        start=1
+                            task_user[current_node.title].append('User'+str(user_count))
+                    if(current_node.output!='NULL'):
+                        next_link = current_node.output
+                        current_node = next_link.toOperator
                     else:
-                        if(last_user != ''):
-                            ind = current_node.not_executed.index(last_user)
-                        else:
-                            ind = 0
-                        current_node.not_executed.insert(ind,'User'+str(user_count))
-                        if(current_node.title not in task_user):
-                            task_user[current_node.title] = ['User'+str(user_count)]
-                        else:
-                            task_user[current_node.title].insert(ind, 'User'+str(user_count))
-
-                else:
-                    current_node.not_executed.append('User'+str(user_count))
-                    if(current_node.title not in task_user):
-                        task_user[current_node.title] = ['User'+str(user_count)]
+                        break
+                user_count+=1  
+                global result 
+                val = "Started execution of Workflow Engine"+" "+l[0].name+"\n"
+                #print("IS EXECUTING", myeng.is_executing)
+                # yield "data: %s\n\n" % (val)
+                # time.sleep(2)
+                print("Started execution of Workflow Engine"+" "+l[0].name)
+                current_node = l[0].start_node
+                task_no = 1
+                p = 'p'+str(task_no)
+                while(current_node != 'NULL'):
+                    globals()[p] = Process(target=execute_node, args=(current_node,task_user[current_node.title][0] ))
+                    task_user[current_node.title].pop(0)
+                    # globals()[p] = threading.Thread(target=execute_node, args=(current_node,))
+                    eval(p).start()
+                    eval(p).join()
+                    # with concurrent.futures.ThreadPoolExecutor() as executer:
+                    #     future = executer.submit(execute_node, current_node,task_user[current_node.title][0] )
+                    #     task_user[current_node.title].pop(0)
+                    #     #print("^^^^^^^^^")
+                    #     value = yield from future.result()
+                    #     if(value is not None):
+                    #         yield "data: %s\n\n" % (value)            
+                    task_no+=1
+                    p = 'p'+str(task_no)
+                    #value = yield from execute_node(current_node) 
+                    #yield "data: %s\n\n" % (value)              
+                    if(current_node.output!='NULL'):
+                        #print(current_node.title, current_node.output.id, current_node.output.toOperator)
+                        #print("IS EXECUTING", myeng.is_executing)
+                        next_link = current_node.output
+                        current_node = next_link.toOperator
+                        #print("_______", current_node.title)
                     else:
-                        task_user[current_node.title].append('User'+str(user_count))
-                if(current_node.output!='NULL'):
-                    next_link = current_node.output
-                    current_node = next_link.toOperator
-                else:
-                    break
-            user_count+=1  
-            global result 
-            workflow_name = "TEST"
-            myeng = eval(workflow_name)
-            val = "Started execution of Workflow Engine"+" "+myeng.name+"\n"
-            #print("IS EXECUTING", myeng.is_executing)
-            yield "data: %s\n\n" % (val)
-            time.sleep(0.1)
-            print("Started execution of Workflow Engine"+" "+myeng.name)
-            current_node = myeng.start_node
-            #task_no = 1
-            #p = 'p'+str(task_no)
-            #while(current_node != 'NULL'):
-            with concurrent.futures.ThreadPoolExecutor() as executer:
-                future = executer.submit(execute_node, current_node,task_user[current_node.title][0] )
-                task_user[current_node.title].pop(0)
-                #print("^^^^^^^^^")
-                value = yield from future.result()
-                if(value is not None):
-                    yield "data: %s\n\n" % (value)            
-            #task_no+=1
-            #    p = 'p'+str(task_no)
-                             
-            #     if(current_node.output!='NULL'):
-            #         next_link = current_node.output
-            #         current_node = next_link.toOperator
-            #     else:
-            #         break
-
-            # print("Finished execution of Workflow engine"+" "+myeng.name)
-            # val = "Finished execution of Workflow Engine"+" "+myeng.name+"\n"
-            # yield "data: %s\n\n" % (val)
-            # time.sleep(2)  # an artificial delay 
-            # val = ' '  
-            # yield "data: %s\n\n" % (val)
-            # time.sleep(2) 
-            #yield "data: END-OF-WORKFLOW\n\n"                     
+                        break
+                #print("IS EXECUTING", myeng.is_executing)
+                print("Finished execution of Workflow engine"+" "+l[0].name)
+                val = "Finished execution of Workflow Engine"+" "+l[0].name+"\n"
+                # yield "data: %s\n\n" % (val)
+                # time.sleep(2)  # an artificial delay 
+                # val = ' '  
+                # yield "data: %s\n\n" % (val)
+                # time.sleep(2) 
+                #yield "data: END-OF-WORKFLOW\n\n"                     
         return Response(events(), content_type='text/event-stream')
     return redirect(url_for('static', filename='demo.html'))
     

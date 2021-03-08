@@ -5,7 +5,10 @@ from json import JSONEncoder
 from time import sleep
 from multiprocessing import Process, Manager
 import threading
+import random
 import concurrent.futures
+
+import multiprocessing
 
 from flask_cors import CORS, cross_origin
 
@@ -32,7 +35,7 @@ class Link(object):
         self.toConnector = toConnector
 
 class Operator(object):
-    def __init__(self, id, title, time, input, output, not_executed, fin_executed, jobs, is_executing, executing_user):
+    def __init__(self, id, title, time, input, output, not_executed, fin_executed, jobs, is_executing, executing_user, wait_time):
         self.id = id
         self.title = title
         self.time = time
@@ -43,6 +46,7 @@ class Operator(object):
         self.jobs = jobs
         self.is_executing = is_executing
         self.executing_user = executing_user
+        self.wait_time = wait_time
 
 global result
 result = {}
@@ -52,11 +56,6 @@ global operator_data
 global operatorI
 operatorI = 0
 operator_data={}
-global task_user
-task_user = {}
-global task_no 
-task_no = 1
-
 
 @app.route("/start",methods=["GET"])
 def start():
@@ -97,11 +96,11 @@ def add_operator():
     }       
     task_name = operatorId
     time = 0
-    globals()[task_name] = Operator(task_name,'Task ' + str(operatorI + 1) + '[ Time: 0 ]', time,'NULL', 'NULL',[],[],0, False, 'NULL')      
+    globals()[task_name] = Operator(task_name,'Task ' + str(operatorI + 1) + '[ Time: 0 ]', time,[], [],[],[],0, False, 'NULL',0)      
     if(myeng.start_node == 'NULL'):
         myeng.start_node = eval(task_name) 
         myeng.last_node = eval(task_name)
-    print("FIRST NODE LAST NODE", myeng.start_node.title, myeng.last_node.title)
+    #print("FIRST NODE LAST NODE", myeng.start_node.title, myeng.last_node.title)
     result['operators'][operatorId] = operatorData
     operatorID={}
     operatorID['name'] = operatorId
@@ -135,17 +134,29 @@ def add_link():
         for i in eval(linkDataOriginal['fromOperator']).not_executed:
             not_executed.append(i)
             eval(linkDataOriginal['toOperator']).jobs+=1
-    eval(linkDataOriginal["toOperator"]).not_executed = not_executed
+        eval(linkDataOriginal["toOperator"]).not_executed = not_executed
+        if(eval(linkDataOriginal["toOperator"]).output == []):
+            tasks_to_do.append(eval(linkDataOriginal["toOperator"]))
+        else:
+            ind = tasks_to_do.index(eval(linkDataOriginal["fromOperator"]))
+        print('TASKS TO DO', tasks_to_do)
     #print(eval(linkDataOriginal["toOperator"]).not_executed, eval(linkDataOriginal['toOperator']).jobs )
     globals()[link_name] = Link(link_name,eval(linkDataOriginal['fromOperator']), linkDataOriginal['fromConnector'],eval(linkDataOriginal['toOperator']), linkDataOriginal['toConnector'])
-    #print("From operator", linkDataOriginal['fromOperator'], "To operator", linkDataOriginal["toOperator"])
+    # print("&&&&&&&&&&&&From operator", linkDataOriginal['fromOperator'], "To operator", linkDataOriginal["toOperator"])
     task_name  = linkDataOriginal['fromOperator']
-    globals()[task_name].output = eval(link_name)
+    # print("&&&&&&&&&&&&From operator", eval(task_name).output)
+    eval(task_name).output.append(eval(link_name))
+    # print("&&&&&&&&&&&&From operator", eval(task_name).output)
+    #print(eval(task_name).output, eval(task_name).title)
     task_name  = linkDataOriginal['toOperator']
-    globals()[task_name].input = eval(link_name)
+    # print("&&&&&&&&&&&&To operator", eval(task_name).input)
+    eval(task_name).input.append(eval(link_name))
+    # print("&&&&&&&&&&&&To operator", eval(task_name).input)
+    #print(eval(task_name).input, eval(task_name).title)
     if(eval(linkDataOriginal['fromOperator']) == myeng.last_node):
         myeng.last_node = eval(linkDataOriginal["toOperator"])
     #print("FIRST NODE LAST NODE", myeng.start_node.title, myeng.last_node.title)
+
     resp_dic={}
     resp = jsonify(resp_dic)
     #print(result['links'].keys())
@@ -204,17 +215,27 @@ def delete_operator():
     operatorId = data_dic['operatorId']
     #print(eval(operatorId))
     if(myeng.start_node == eval(operatorId)):
-        if(eval(operatorId).output!='NULL'):
-            myeng.start_node = eval(operatorId).output.toOperator
+        if(eval(operatorId).output!=[]):
+            myeng.start_node = eval(operatorId).output[0].toOperator
         else:
             myeng.start_node = 'NULL'
 
-    if(eval(operatorId).input!='NULL'):
-        eval(operatorId).input.toOperator='NULL'
-        eval(operatorId).input.toConnector = 'NULL'
-    if(eval(operatorId).output!='NULL'):
-        eval(operatorId).output.fromOperator='NULL'
-        eval(operatorId).output.fromConnector = 'NULL'    
+    if(myeng.last_node == eval(operatorId)):
+        if(eval(operatorId).output!=[]):
+            myeng.last_node = eval(operatorId).input[0].toOperator
+        else:
+            myeng.last_node = 'NULL'
+
+    if(eval(operatorId).input!=[]):
+        for i in range(eval(operatorId).input):
+            eval(operatorId).input[i].toOperator='NULL'
+            eval(operatorId).input[i].toConnector = 'NULL'
+            # del eval(operatorId).input[i]
+    if(eval(operatorId).output!=[]):
+        for i in range(eval(operatorId).output):
+            eval(operatorId).output[i].fromOperator='NULL'
+            eval(operatorId).output[i].fromConnector = 'NULL'  
+            # del eval(operatorId).output[i] 
     del result['operators'][operatorId] 
     del globals()[operatorId]
     resp_dic={}
@@ -232,9 +253,9 @@ def delete_link():
     data_dic=json.loads(data)
     linkId = 'link'+str(data_dic['linkId'])
     if(globals()[linkId].toOperator!='NULL'):
-        globals()[linkId].toOperator.input='NULL'
+        globals()[linkId].toOperator.input.remove(eval(linkId))
     if(globals()[linkId].fromOperator!='NULL'):
-        globals()[linkId].fromOperator.output='NULL'
+        globals()[linkId].fromOperator.output.remove(eval(linkId))
     del result['links'][linkId] 
     del globals()[linkId]
     resp_dic={}
@@ -248,9 +269,10 @@ val =''
 global user_count 
 user_count = 1
 
-def execute_node(current_node, user_name):
-    #global task_no
-    print(current_node.title, user_name)
+def execute_node(current_node):
+    #print("hello")
+    print("***********************IN EXECUTE NODE",current_node.title,current_node.is_executing, current_node.not_executed)
+    # print("----------", task)
     workflow_name = "TEST"
     myeng = eval(workflow_name)
     if(current_node.is_executing == False):
@@ -259,9 +281,9 @@ def execute_node(current_node, user_name):
         #     print("CURRENT   LINK",current_node.title,prev_link)
         # else:
         #     print("CURRENT   LINK",current_node.title,prev_link.id,current_node.not_executed)
-        if(prev_link == 'NULL'):
+        if(prev_link == []):
             #print("IN IF")
-            while(current_node.jobs>0 and current_node.not_executed != []):
+            while(current_node.jobs>0 and current_node.not_executed != [] and current_node.is_executing==False):
                 if(myeng.last_node.is_executing==True or myeng.last_node.not_executed!=[]):
                     myeng.is_executing=True
                 else:
@@ -281,77 +303,80 @@ def execute_node(current_node, user_name):
                 current_node.executing_user = 'NULL'
                 current_node.fin_executed.append(not_exec)
                 current_node.jobs-=1 
-                old_user_name = user_name
-                if(current_node.not_executed!=[]):
-                    user_name = current_node.not_executed[0]
                 current_node.is_executing = False
-                if(current_node.output!= 'NULL'):
-                    #p = 'p'+str(task_no)
-                    #while(current_node != 'NULL'):
-                    with concurrent.futures.ThreadPoolExecutor() as executer:
-                        future = executer.submit(execute_node, current_node.output.toOperator ,old_user_name )
-                        task_user[current_node.output.toOperator.title].remove(old_user_name)
-                        #print("^^^^^^^^^")
-                        value = yield from future.result()
-                        if(value is not None):
-                            yield "data: %s\n\n" % (value)            
-                    #task_no+=1
         else:
             #print("IN ELSE")
-            prev_node = prev_link.fromOperator
+            # prev_link = prev_link[0]
+            # prev_node = prev_link.fromOperator
             c=0
-            while(current_node.not_executed == [] or current_node.is_executing == True or current_node.not_executed[0]!=user_name or current_node.not_executed[0] not in prev_node.fin_executed):
+            ans = False
+            while(current_node.not_executed != [] and ans == False ):
+                # and current_node.not_executed[0] not in prev_node.fin_executed
+                for i in prev_link:
+                    if(current_node.not_executed != []):
+                        ans = ans or current_node.not_executed[0] in i.fromOperator.fin_executed
                 c+=1
-            while(True):
-                while(current_node.jobs>0 and current_node.not_executed != [] and current_node.is_executing == False and current_node.not_executed[0] in prev_node.fin_executed and current_node.not_executed[0]==user_name):
-                    if(myeng.last_node.is_executing==True or myeng.last_node.not_executed!=[]):
-                        myeng.is_executing=True
-                    else:
-                        myeng.is_executing=False
-                    not_exec = current_node.not_executed.pop(0)
-                    current_node.executing_user = not_exec
-                    current_node.is_executing = True
-                    val = "Started execution of" +" "+current_node.title+" for "+not_exec+ "\n"
+            while(current_node.jobs>0 and current_node.not_executed != [] and current_node.is_executing==False and ans==True):
+                if(myeng.last_node.is_executing==True or myeng.last_node.not_executed!=[]):
+                    myeng.is_executing=True
+                else:
+                    myeng.is_executing=False
+                not_exec = current_node.not_executed.pop(0)
+                current_node.executing_user = not_exec
+                current_node.is_executing = True
+                random_no = random.randint(1,3)
+                #print(random_no)
+                if(random_no == 1):
+                    random_delay = random.randint(2,7)
+                    current_node.wait_time += random_delay
+                    val = "STARTED DELAY of "+str(random_delay)+" sec for "+not_exec+ "\n"
                     yield "data: %s\n\n" % (val)
                     time.sleep(0.1)
-                    print("Started execution of" +" "+current_node.title+" for "+not_exec)
-                    time.sleep(current_node.time)
-                    val = "Finished execution of" +" "+current_node.title+" for "+not_exec+ "\n"
+                    print("STARTED DELAY of "+str(random_delay)+" sec for "+not_exec)
+                    time.sleep(random_delay)
+                    val = "FINISHED DELAY of "+str(random_delay)+" sec for "+ not_exec+ "\n"
                     yield "data: %s\n\n" % (val)
                     time.sleep(0.1)
-                    print("Finished execution of" +" "+current_node.title+" for "+not_exec)
-                    current_node.fin_executed.append(not_exec)
-                    current_node.executing_user = 'NULL'
-                    current_node.jobs-=1 
-                    old_user_name = user_name
-                    if(current_node.not_executed!=[]):
-                        user_name = current_node.not_executed[0]
-                    current_node.is_executing = False
-                    if(current_node.output!= 'NULL'):
-                        #p = 'p'+str(task_no)
-                        #while(current_node != 'NULL'):
-                        with concurrent.futures.ThreadPoolExecutor() as executer:
-                            future = executer.submit(execute_node, current_node.output.toOperator , old_user_name )
-                            task_user[current_node.output.toOperator.title].remove(old_user_name)
-                            #print("^^^^^^^^^")
-                            value = yield from future.result()
-                            if(value is not None):
-                                yield "data: %s\n\n" % (value)            
-                        #task_no+=1
-                    
-        current_node.is_executing = False
+                    print("FINISHED DELAY of "+str(random_delay)+" sec for "+not_exec)
+                    current_node.wait_time -= random_delay
+                
+                val = "Started execution of" +" "+current_node.title+" for "+not_exec+ "\n"
+                yield "data: %s\n\n" % (val)
+                time.sleep(0.1)
+                print("Started execution of" +" "+current_node.title+" for "+not_exec)
+                time.sleep(current_node.time)
+                val = "Finished execution of" +" "+current_node.title+" for "+not_exec+ "\n"
+                yield "data: %s\n\n" % (val)
+                time.sleep(0.1)
+                print("Finished execution of" +" "+current_node.title+" for "+not_exec)
+                current_node.fin_executed.append(not_exec)
+                current_node.executing_user = 'NULL'
+                current_node.jobs-=1 
+                current_node.is_executing = False
+                current_node.wait_time -= current_node.time
+                #print(current_node.title,current_node.is_executing)
+                ans = False
+                while(current_node.not_executed != [] and ans == False ):
+                    # and current_node.not_executed[0] not in prev_node.fin_executed
+                    for i in prev_link:
+                        if(current_node.not_executed != []):
+                            ans = ans or current_node.not_executed[0] in i.fromOperator.fin_executed
+                    print(ans)
+        # current_node.is_executing = False
         if(myeng.last_node.is_executing==True or myeng.last_node.not_executed!=[]):
             myeng.is_executing=True
         else:
             myeng.is_executing=False
     
+global tasks_to_do
+tasks_to_do = []
 
 @app.route("/execute_engine",methods=["GET"])  
 def execute_engine(): 
-    global task_user
     if request.headers.get('accept') == 'text/event-stream':   
         def events():           
             val = ''
+            global tasks_to_do
             workflow_name = "TEST"
             myeng = eval(workflow_name)
             current_node = myeng.start_node 
@@ -367,69 +392,111 @@ def execute_engine():
                         else:
                             last_user = ''
                         current_node.not_executed.insert(0,'User'+str(user_count))
-                        if(current_node.title not in task_user):
-                            task_user[current_node.title] = ['User'+str(user_count)]
-                        else:
-                            task_user[current_node.title].insert(0, 'User'+str(user_count))
+                        current_node.wait_time += current_node.time
+                        tasks_to_do.append(current_node)
+                        print("^^^^^^^^^^^^",current_node.title)
                         start=1
                     else:
-                        if(last_user != ''):
-                            ind = current_node.not_executed.index(last_user)
-                        else:
+                        if(prev_node.not_executed==[]):
                             ind = 0
-                        current_node.not_executed.insert(ind,'User'+str(user_count))
-                        if(current_node.title not in task_user):
-                            task_user[current_node.title] = ['User'+str(user_count)]
                         else:
-                            task_user[current_node.title].insert(ind, 'User'+str(user_count))
+                            rem = 'NULL'
+                            if(prev_node.is_executing):
+                                rem=prev_node.executing_user
+                            for i in prev_node.not_executed:
+                                if(i=='User'+str(user_count)):
+                                    break
+                                if(i in current_node.not_executed):
+                                    rem = i
+                            if(rem == 'NULL'):
+                                ind = 0
+                            else:
+                                ind = current_node.not_executed.index(rem)+1
+                        current_node.not_executed.insert(ind,'User'+str(user_count))
+                        current_node.wait_time += current_node.time
+                        tasks_to_do.append(current_node)
+                        print("^^^^^^^^^^^^",current_node.title)
 
                 else:
                     current_node.not_executed.append('User'+str(user_count))
-                    if(current_node.title not in task_user):
-                        task_user[current_node.title] = ['User'+str(user_count)]
-                    else:
-                        task_user[current_node.title].append('User'+str(user_count))
-                if(current_node.output!='NULL'):
-                    next_link = current_node.output
+                    current_node.wait_time += current_node.time
+                    tasks_to_do.append(current_node)
+                    print("^^^^^^^^^^^^",current_node.title)
+                    print('---------------',current_node.title, current_node.not_executed)
+                prev_node = current_node
+                if(current_node.output!=[]):
+                    temp=float('inf')
+                    node_time = float('inf')
+                    #print('--------^^^^^^^^^^^^^^________________', current_node.output)
+                    for i in current_node.output:
+                        if(i.toOperator.wait_time == temp):
+                            if(i.toOperator.time < node_time):
+                                temp = i.toOperator.wait_time
+                                node_time = i.toOperator.time
+                                next_link = i
+                        if(i.toOperator.wait_time< temp):
+                            temp = i.toOperator.wait_time
+                            node_time = i.toOperator.time
+                            next_link = i
                     current_node = next_link.toOperator
                 else:
                     break
             user_count+=1  
             global result 
-            workflow_name = "TEST"
-            myeng = eval(workflow_name)
+            # workflow_name = "TEST"
+            # myeng = eval(workflow_name)
             val = "Started execution of Workflow Engine"+" "+myeng.name+"\n"
             #print("IS EXECUTING", myeng.is_executing)
             yield "data: %s\n\n" % (val)
             time.sleep(0.1)
             print("Started execution of Workflow Engine"+" "+myeng.name)
-            current_node = myeng.start_node
-            #task_no = 1
-            #p = 'p'+str(task_no)
-            #while(current_node != 'NULL'):
-            with concurrent.futures.ThreadPoolExecutor() as executer:
-                future = executer.submit(execute_node, current_node,task_user[current_node.title][0] )
-                task_user[current_node.title].pop(0)
-                #print("^^^^^^^^^")
-                value = yield from future.result()
-                if(value is not None):
-                    yield "data: %s\n\n" % (value)            
-            #task_no+=1
-            #    p = 'p'+str(task_no)
-                             
-            #     if(current_node.output!='NULL'):
-            #         next_link = current_node.output
-            #         current_node = next_link.toOperator
-            #     else:
-            #         break
-
-            # print("Finished execution of Workflow engine"+" "+myeng.name)
-            # val = "Finished execution of Workflow Engine"+" "+myeng.name+"\n"
-            # yield "data: %s\n\n" % (val)
-            # time.sleep(2)  # an artificial delay 
-            # val = ' '  
-            # yield "data: %s\n\n" % (val)
-            # time.sleep(2) 
+            # current_node = myeng.start_node
+            task_no = 1
+            p = 'p'+str(task_no)
+            while(tasks_to_do != []):
+                if(tasks_to_do[0].is_executing == False):
+                    with concurrent.futures.ThreadPoolExecutor() as executer:
+                        future = executer.submit(execute_node, tasks_to_do[0])
+                        h = tasks_to_do.pop(0)
+                        print(">>>>>>>>>>>>POP", h.title)
+                        value = yield from future.result()
+                        if(value is not None):
+                            yield "data: %s\n\n" % (value)
+                else:
+                    h = tasks_to_do.pop(0)           
+                    print("#############POP", h.title)
+                print('TO_DoooooooO',tasks_to_do)
+                # task_no+=1
+                # p = 'p'+str(task_no)
+                # value = yield from execute_node(current_node) 
+                # yield "data: %s\n\n" % (value)              
+                # if(current_node.output!=[]):
+                #     #print(current_node.title, current_node.output.id, current_node.output.toOperator)
+                #     #print("IS EXECUTING", myeng.is_executing)
+                #     temp=float('inf')
+                #     node_time = float('inf')
+                #     for i in current_node.output:
+                #         if(i.toOperator.time * i.toOperator.jobs == temp):
+                #             if(i.toOperator.time < node_time):
+                #                 temp = i.toOperator.time * i.toOperator.jobs
+                #                 node_time = i.toOperator.time
+                #                 next_link = i
+                #         if(i.toOperator.time * i.toOperator.jobs < temp):
+                #             temp = i.toOperator.time * i.toOperator.jobs
+                #             node_time = i.toOperator.time
+                #             next_link = i
+                #     current_node = next_link.toOperator
+                #     #print("_______", current_node.title)
+                # else:
+                #     break
+            #print("IS EXECUTING", myeng.is_executing)
+            print("Finished execution of Workflow engine"+" "+myeng.name)
+            val = "Finished execution of Workflow Engine"+" "+myeng.name+"\n"
+            yield "data: %s\n\n" % (val)
+            time.sleep(0.1)  # an artificial delay 
+            val = ' '  
+            yield "data: %s\n\n" % (val)
+            time.sleep(0.1) 
             #yield "data: END-OF-WORKFLOW\n\n"                     
         return Response(events(), content_type='text/event-stream')
     return redirect(url_for('static', filename='demo.html'))
@@ -444,8 +511,8 @@ def calculate_time():
     myeng.total_time = 0
     while(current_node != 'NULL'):
         myeng.total_time += current_node.time
-        if(current_node.output!='NULL'):
-            next_link = current_node.output
+        if(current_node.output!=[]):
+            next_link = current_node.output[0]
             current_node = next_link.toOperator
         else:
             break
@@ -455,12 +522,6 @@ def calculate_time():
     resp.headers['Access-Control-Allow-Origin']='*'
     return resp
 
-'''
-@app.route("/api/v1/workflow/current_task/<workflow_name>",methods=["GET"])  
-def current_task(workflow_name):
-    myeng = eval(workflow_name)
-    return make_response(myeng.current_node,200)
-'''
 if __name__ == "__main__":
     app.secret_key = '123'
     app.debug=True

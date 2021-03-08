@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Task name is obv stored in the workflow right? Can I use that? -->
 
 <head>
     <title>Workflow</title>
@@ -14,64 +13,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- Flowchart CSS and JS -->
     <link rel="stylesheet" href="../jquery.flowchart.css">
-    <script type="text/javascript" src="../jquery.flowchart.js"></script>
+    <script src="../jquery.flowchart.js"></script>
 
     <style>
+        
         /* basic positioning */
-        
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 100px;
-            /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            font-size: 20px;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-        /* Modal Content */
-        
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-        }
-        /* The Close Button */
-        
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
         
         .legend {
             list-style: none;
@@ -107,12 +56,13 @@
         }
         
         .flowchart-example-container {
-            width: 1480px;
-            height: 440px;
+            width: 1450px;
+            height: 400px;
             background: white;
             border: 3px solid #0275d8;
             margin-bottom: 10px;
-            margin-left: 10px;
+            margin-left: 30px;
+            margin-top: 40px;
         }
         
         .display_data {
@@ -129,54 +79,50 @@
         }
         
         .margin-but {
-            margin-left: 10px;
+            margin-left: 30px;
             margin-top: 10px;
+            font-family: "Times New Roman", Times, serif;
+
         }
-        
+
+        .margin-butt {
+            margin-left: 1030px;
+            margin-top: 10px;
+            font-family: "Times New Roman", Times, serif;
+
+        }
+        .calculate_time
+        {
+            position: absolute;
+            top: 610px;
+            margin-left: 1090px;
+            /* font-family: "Times New Roman", Times, serif; */
+            /* font-size:16px;      */
+        }
+        .execute_workflow
+        {
+            position: absolute;
+            top: 610px;
+            margin-left: 1290px;
+            /* font-family: "Times New Roman", Times, serif; */
+            /* font-size:16px;      */
+        }
+
         .title-workflow {
-            margin-left: 10px;
+            margin-left: 600px;
             font-family: "Times New Roman", Times, serif;
             position: absolute;
             top: 30px;
+            font-size:50px
         }
         
         .priority-user {
-            margin-top: 10px;
-            margin-left: 250px;
-            /* margin-right:600px */
-            font-family: "Times New Roman", Times, serif;
-            font-size: 18px;
-        }
-        
-        .query1 {
-            margin-top: 10px;
-            margin-left: 1100px;
-            /* margin-right:600px; */
-            font-family: "Times New Roman", Times, serif;
-            font-size: 18px;
-        }
-        
-        .query2 {
-            top: 15px;
-            margin-left: 1100px;
-            /* margin-right:600px; */
-            font-family: "Times New Roman", Times, serif;
-            font-size: 18px;
-        }
-        
-        .choose-file {
-            top: 596px;
-            left: 1px;
+            /* margin-top: 10px; */
             position: absolute;
-            /* margin-right:600px; */
-            /* font-family: "Times New Roman", Times, serif; */
-            /* font-size:18px; */
-        }
-        
-        .choose-file-submit {
-            top: 2px;
-            left: 300px;
-            position: absolute;
+            top: 560px;
+            margin-left: 1090px;
+            font-family: "Times New Roman", Times, serif;
+            font-size:16px;
         }
         
         .title-logs {
@@ -194,138 +140,100 @@
         
         .create-task {
             font-family: "Times New Roman", Times, serif;
-            margin-left: 10px;
-            margin-top: 15px;
-            font-size: 16px;
+            margin-left: 30px;
+            margin-top: 10px;
+            font-size: 18px;
         }
         
         .time {
-            margin-left: 1220px;
+            margin-left: 1160px;
             position: absolute;
-            top: 5px;
+            top: 20px;
             /* right: 250px; */
             font-family: "Times New Roman", Times, serif;
             font-size: 34px;
-        }
-        
-        .query1_data {
-            top: 470px;
-            margin-left: 1100px;
-            font-size: 24px;
-            position: absolute;
-            font-family: "Times New Roman", Times, serif
-        }
-        
-        .query2_data {
-            top: 500px;
-            margin-left: 1100px;
-            font-size: 24px;
-            position: absolute;
-            font-family: "Times New Roman", Times, serif
         }
         
         .textbox {
             padding: 5px 0 0 5px;
             margin-left: 10px;
         }
-        
-        #stopwatch {
-            margin-left: 1210px;
-            position: absolute;
-            width: 210px;
-            height: 50px;
-            margin-top: 10px;
-            font-size: 35px;
-            text-align: center;
+        #stopwatch {	
+            margin-left: 1150px;
+            position: absolute;	
+            width: 210px;	
+            height: 50px;	
+            margin-top: 30px;	
+            font-size: 35px;	
+            text-align: center;	
             font-family: "Times New Roman", Times, serif;
-            top: 30px;
-        }
-        
-        #stopcontainer {
+            top:30px;
+        }	
+        	
+        #stopcontainer {	
             padding-right: 150px;
-            padding-top: 5px;
+            padding-top:5px;	
         }
     </style>
 </head>
 
 <body>
-    <div class="img_pos">
-        <img src="../unnamed.png" alt="PES Logo" height="100px" width="100px">
+    <div class="img_pos">	
+        <img src="../unnamed.png" alt="PES Logo" height="100px" width="100px">	
     </div>
-    <div id="stopcontainer">
-        <div id="stopwatch">
-            00 : 00 : 00
-        </div>
+    <div id="stopcontainer">		
+        <div id="stopwatch">	
+            00 : 00 : 00	
+        </div>	
     </div>
-    <!-- <h1 class="title-workflow">Workflow Engine</h1> -->
-    <h1 id="workflow_name" class="title-workflow">{{workflow_name}} Workflow Engine</h1>
+    <h1 class="title-workflow">Workflow Engine</h1>
     <div id="chart_container">
         <div class="flowchart-example-container" id="flowchartworkspace">
-            <svg width="1700px" height="600px" id="svgtag"></svg>
-            <svg width="1700px" height="600px" id="userdisp"></svg>
+            <!-- <ul class="legend">
+                <li><span class="not_executing"></span> Not executing</li>
+                <li><span class="executing"></span> Executing</li>
+                <li><span class="completed_execution"></span> Completed execution</li>
+            </ul> -->
+            <!-- <h1>hello</h1> -->
+            <svg width="800px" height="400px" id="svgtag"></svg>
+            <svg width="800px" height="400px" id="userdisp"></svg>
         </div>
 
+        <!-- <h1 class="title-logs">Workflow Logs:</h1>
+        <div class="display_data" id="display_data"></div> -->
     </div>
     <div class="draggable_operators">
     </div>
-    <button class="btn btn-primary create_operator margin-but" mdbWavesEffect>Create task</button>
-    <button class="btn btn-primary delete_selected_button margin-but">Delete selected task / link</button>
-    <button class="btn btn-primary calculate_time margin-but" id="calculate_time">Calculate Time</button>
-    <button class="btn btn-primary execute_workflow margin-but" id="execute_workflow">Execute Workflow</button>
+    <button class="btn btn-primary btn-lg create_operator margin-but" mdbWavesEffect>Create task</button>
+    <button class="btn btn-primary btn-lg delete_selected_button margin-but">Delete selected task / link</button>
+    
+
     <!-- <button class="btn btn-primary get_data margin-but" id="get_data">Get data</button> -->
-    <button id="myBtn" class="btn btn-primary margin-but" onclick="Display_logs()">Display Logs</button>
-
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h1>Workflow logs :</h1>
-            <p id="display_data">Display logs</p>
-        </div>
-
-    </div>
-    <button class="btn btn-primary margin-but" id="text_submit">Upload File</button>
-    <span class="priority-user">
+    <div class="priority-user">
         <label for="priority_user">Priority User: </label><input id="priority_user" type="text">
-    </span>
-    <button class="btn btn-primary" id="priority_submit">Add</button>
-    <span class="query1">
-        <label for="query1">No.of users: </label><input id="query1" type="text">
-    </span>
-    <button class="btn btn-primary" id="query1_submit">Add</button>
-    <span class="query2">
-        <label for="query2">Total time: </label><input id="query2" type="text">
-    </span>
-    <button class="btn btn-primary" id="query2_submit">Add</button>
-    <h4 class="query1_data" id="query1_data">{{query1_data}}</h4>
-    <h4 class="query2_data" id="query2_data">{{query2_data}}</h4>
-    <span id="operator_properties" style="display: block;" class="create-task">
+        <button class="btn btn-primary btn-lg" id="priority_submit">Submit</button>
+    </div>
+    <div id="operator_properties" style="display: block;" class="create-task">
         <label for="operator_title">Task's title: </label><input id="operator_title" type="text">
         <label for="operator_time">Task's time: </label><input id="operator_time" type="text">
-    </span>
+    </div>
     <!--<button class="set_data" id="set_data">Set data</button>-->
-    <span class="choose-file">	
-        <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">	
-            <input class="btn btn-primary margin-but" type="file" name="file" />	
-            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>	
-        </form>	
-        <h4>	
-            <div id="display_time" class="time"></div>	
-        </h4>	
-    </span>
-
+    <div>
+        <button class="btn btn-primary btn-lg calculate_time margin-butt" id="calculate_time">Calculate Time</button>
+        <button class="btn btn-primary btn-lg execute_workflow margin-butt" id="execute_workflow">Execute Workflow</button>
+        <h4>
+            <div id="display_time" class="time"></div>
+        </h4>
+    </div>
+    <!-- <div>
+        <textarea rows="5" cols="40" id="flowchart_data" class="textbox"></textarea>
+    </div> -->
     <script type="text/javascript">
         /* global $ */
-        var displaydata = '';
-        var disp = 0;
         let millieseconds = 0;
         let seconds = 0;
         let minutes = 0;
         let hours = 0;
-        //var task_data = "Task1 3 Task2 2 Task3 4"
-        //var link_data = "Task1 Task2 Task2 Task3"
 
         let displayseconds = 0;
         let displayminutes = 0;
@@ -334,41 +242,6 @@
         let interval = null;
 
         let status = "stopped";
-        var Worktasks = {};
-
-
-        var modal = document.getElementById("myModal");
-
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-            modal.style.display = "block";
-            document.getElementById("display_data").innerHTML = displaydata;
-            console.log("There 1??");
-            disp = 1;
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // function Display_logs() {
-        //     document.getElementById("display_data").innerHTML = displaydata;
-        //     disp = 1;
-        // }
 
         function Stopwatch() {
 
@@ -464,15 +337,12 @@
             //-----------------------------------------
             //--- operator and link properties
             //--- start
-
             var $operatorProperties = $('#operator_properties');
             $operatorProperties.hide();
             var $linkProperties = $('#link_properties');
             $linkProperties.hide();
             var $operatorTitle = $('#operator_title');
             var $priorityUser = $('#priority_user');
-            var $query1 = $('#query1');
-            var $query2 = $('#query2');
             var $operatorTime = $('#operator_time');
             var $linkColor = $('#link_color');
 
@@ -544,152 +414,6 @@
                 $priorityUser.val() = '';
             };
             $('#priority_submit').click(Priority_User);
-
-            var dict1 = [];
-
-            function Query1() {
-                query1_dict = {};
-                query1_dict['no_of_users'] = $query1.val();
-
-                $.ajax({
-                    type: "POST",
-                    url: 'http://localhost:5000/query1',
-                    data: JSON.stringify(query1_dict),
-                    dataType: 'json'
-                }).done(function(returndata) {
-                    query1_data = "Estimated time for " + $query1.val() + " users is " + returndata['total_time'] + " sec";
-                    document.getElementById("query1_data").innerHTML = query1_data;
-                    $query1.val() = '';
-                })
-            };
-
-
-            $('#query1_submit').click(Query1);
-
-            function Query2() {
-                query2_dict = {};
-                query2_dict['total_time'] = $query2.val();
-
-                $.ajax({
-                    type: "POST",
-                    url: 'http://localhost:5000/query2',
-                    data: JSON.stringify(query2_dict),
-                    dataType: 'json'
-                }).done(function(returndata) {
-                    query2_data = "Estimated no.of users for " + $query2.val() + " sec is " + returndata['finished_users'];
-                    document.getElementById("query2_data").innerHTML = query2_data;
-                    $query2.val() = '';
-                })
-            };
-
-            $('#query2_submit').click(Query2);
-
-
-
-            function Submit_text_file() {
-                //Reading the file
-                var task_data;
-                var link_data;
-                returnvals = {}
-                $.ajax({
-                    type: "POST",
-                    url: 'http://localhost:5000/read_file'
-                }).done(function(returndata) {
-                    console.log(returndata)
-                    workflow_name = returndata['wn'] + ' Workflow Engine';
-                    document.getElementById("workflow_name").innerHTML = workflow_name;
-                    task_data = returndata['td'];
-                    console.log(task_data)
-                    link_data = returndata['ld'];
-                    t = task_data.split(" ");
-                    var i1 = 0;
-                    //console.log("--------",t.length);
-                    while (i1 < t.length) {
-                        create_task(t[i1], t[i1 + 1]);
-                        console.log('added task');
-                        pausecomp(1000);
-                        // console.log("--------");
-                        i1 = i1 + 2;
-                    }
-                    disp = 1;
-                    l = link_data.split(" ");
-                    // $flowchart.flowchart('textLink');
-                    console.log("&&&&&", l);
-                    setTimeout(alertFunc, 3000);
-                });
-            }
-
-            function pausecomp(millis) {
-                console.log('started wait');
-                var date = new Date();
-                var curDate = null;
-                do {
-                    curDate = new Date();
-                }
-                while (curDate - date < millis);
-                console.log('finished wait');
-            }
-
-            function alertFunc1() {
-                console.log('1');
-            };
-
-
-            function alertFunc() {
-                var i1 = 0;
-                while (i1 < l.length) {
-                    fromTask = l[i1];
-                    toTask = l[i1 + 1];
-                    console.log('#######', fromTask, toTask);
-                    console.log(dict1);
-                    $flowchart.flowchart('textLink', dict1[fromTask], 'output_1', dict1[toTask], 'input_1');
-                    // $flowchart.flowchart('textLink');
-                    console.log(dict1["abc0"])
-                    i1 = i1 + 2;
-                }
-
-            };
-
-            $('#text_submit').click(Submit_text_file);
-
-
-            var taskoper = {}
-
-            function create_task(name1, time1) {
-                $.ajax({
-                    type: "POST",
-                    url: 'http://localhost:5000/add_operator'
-                }).done(function(operator_data) {
-                    var operatorId = operator_data['operatorId']['name'];
-                    var operatorData = operator_data['operatorData'];
-                    dict1[name1] = operatorId;
-                    //console.log("--------", operatorId, operatorData)
-                    $flowchart.flowchart('createOperator', operatorId, operatorData);
-                    change_title_task(operatorId, name1, time1)
-                    console.log("Here is what we got", name1, operatorId);
-                    taskoper[name1] = operatorId
-                });
-            }
-
-            function change_title_task(operatorId, name1, time1) {
-                var selectedOperatorId = operatorId;
-                console.log('******', selectedOperatorId);
-                if (selectedOperatorId != null) {
-                    console.log("//////////")
-                    $flowchart.flowchart('setOperatorTitle', selectedOperatorId, name1 + ' [ Time: ' + time1 + ' ] ');
-                    changed_data = {};
-                    changed_data['operatorId'] = selectedOperatorId;
-                    changed_data['newTitle'] = name1 + ' [ Time: ' + time1 + ' ] ';
-                    changed_data['time'] = time1;
-                    $.ajax({
-                        type: "POST",
-                        url: 'http://localhost:5000/change_title',
-                        data: JSON.stringify(changed_data),
-                        dataType: 'json'
-                    })
-                }
-            };
-
             //--- end
             //--- operator and link properties
             //-----------------------------------------
@@ -697,7 +421,6 @@
             //-----------------------------------------
             //--- delete operator / link button
             //--- start
-
             $flowchart.parent().siblings('.delete_selected_button').click(function() {
                 //console.log($("#operator_properties"));
                 $flowchart.flowchart('deleteSelected');
@@ -712,19 +435,18 @@
             //--- create operator button
             //--- start
 
-            var posoftask = 0;
-
             $flowchart.parent().siblings('.create_operator').click(function() {
                 $.ajax({
                     type: "POST",
                     url: 'http://localhost:5000/add_operator'
                 }).done(function(operator_data) {
+                    //console.log(operator_data);
+                    //console.log('hi');
                     var operatorId = operator_data['operatorId']['name'];
+                    //var operatorId  = 'operator_1';
                     var operatorData = operator_data['operatorData'];
-                    var name1 = operatorData['properties']['title'].split(" ");
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
-                    console.log("Here is what we got", name1[0], operatorId);
-                    taskoper[name1[0]] = operatorId
+                    //console.log(operatorId, operatorData);
                 });
             });
             //--- end
@@ -798,11 +520,10 @@
                 $flowchart.flowchart('setData', data);
             }
             $('#set_data').click(Text2Flow);
+            var displaydata = '';
 
-
-            var dict = {};
+            var dict = {};	
             let user = 0;
-            var indexoftasks = 0;
 
             function Execute_Workflow() {
                 $.ajax({
@@ -811,73 +532,54 @@
                 });
                 var source = new EventSource('/execute_engine');
 
-
                 source.onmessage = function(e) {
                     if (e.data == ' ') {
                         source.close();
                     }
-
-
                     var d = new Date();
                     var s = d.toUTCString();
-                    $.post("http://localhost:5000/writetofile", {
-                        javascript_data: e.data
-                    });
-                    if (e.data == ' ') {
+                    if(e.data == ' ')
+                    {
                         displaydata = displaydata + e.data + "<br />";
-
-                    } else {
+                    }
+                    else{
                         displaydata = displaydata + s + "<br />" + e.data + "<br />";
                     }
-
-                    if (disp == 1)
-                        document.getElementById("display_data").innerHTML = displaydata;
                     //document.getElementById("display_data").innerHTML = displaydata;
                     var res = e.data.split(" ");
-                    console.log(res);
-                    if (res[0] == "Started" && res[3] == "Workflow") {
-                        user++;
-                        if (user == 1) {
-                            startStop();
-                        }
-                    }
-                    if (res[0] === "Finished" && res[3] === "Workflow") {
-                        user--;
-                        if (user === 0) {
-                            startStop();
-                        }
-                    }
+                    if (res[0] == "Started" && res[3] == "Workflow") {	
+                        user++;	
+                        if (user == 1) {		
+                            startStop();	
+                        }	
+                    }	
+                    if (res[0] === "Finished" && res[3] === "Workflow") {	
+                        user--;		
+                        if (user === 0) {	
+                            startStop();	
+                        }	
+                    }	
 
-
-
-                    if (res[0] == "Started" && res[3] != "Workflow") {
-                        //console.log("You there??")
-                        //Worktasks[taskname] = The position of that task
-                        if (!(res[3] in Worktasks)) {
-                            Worktasks[res[3]] = indexoftasks;
-                            indexoftasks++;
-                            console.log(Worktasks);
-                        }
-                        //task id
-                        var operatorId = taskoper[res[3]];
-                        var time = parseInt(res[6]);
-                        userstart(operatorId, parseInt(res[10][4]), time);
-                    } else if (res[0] == "Finished" && res[3] != "Workflow") {
-                        userend(parseInt(res[10][4]));
-                        dict[res[10][4]] = taskoper[res[3]];
-                        console.log("This is for delay", dict);
-                    } else if (res[0] == "STARTED" && res[1] == "DELAY") {
-                        var operatorId = dict[res[6][4]];
-                        var countdown = parseInt(res[3]);
-                        userdelaystart(operatorId, parseInt(res[6][4]), countdown)
-                    } else if (res[0] == "FINISHED" && res[1] == "DELAY") {
+                    if (res[0] == "Started" && res[3] == "Task") {
+                        var operatorId = 'created_operator_' + (parseInt(res[4]) - 1);
+                        var time = parseInt(res[7]);	
+                        userstart(operatorId, parseInt(res[11][4]), time);
+                    } else if (res[0] == "Finished" && res[3] == "Task") {
+                        userend(parseInt(res[11][4]));
+                        dict[res[11][4]] = parseInt(res[4]);	
+                        //console.log(dict);	
+                    } else if (res[0] == "STARTED" && res[1] == "DELAY") {	
+                        var operatorId = 'created_operator_' + (dict[res[6][4]] - 1);	
+                        var countdown = parseInt(res[3]);	
+                        userdelaystart(operatorId, parseInt(res[6][4]), countdown)	
+                    } else if (res[0] == "FINISHED" && res[1] == "DELAY") {	
                         userdelayend(parseInt(res[6][4]));
                     }
                 }
             }
             $('#execute_workflow').click(Execute_Workflow);
 
-            function userstart(operatorId, usernum, time) {
+            function userstart(operatorId, usernum,time) {
                 var circids = ["user1c", "user2c", "user3c", "user4c", "user5c", "user6c", "user7c", "user8c", "user9c", "user10c"];
                 var textids = ["user1t", "user2t", "user3t", "user4t", "user5t", "user6t", "user7t", "user8t", "user9t", "user10t"];
                 var countids = ["user1ct", "user2ct", "user3ct", "user4ct", "user5ct", "user6ct", "user7ct", "user8ct", "user9ct", "user10ct"];
@@ -904,16 +606,16 @@
                     .attr("x", data.operators[operatorId].left + texttopcor[usernum - 1])
                     .attr("y", data.operators[operatorId].top - 12)
                     .text(usertext[usernum - 1]);
-                svg.append("text")
-                    .attr("id", countids[usernum - 1])
-                    .attr("x", data.operators[operatorId].left + texttopcor[usernum - 1] + 2)
-                    .attr("y", data.operators[operatorId].top - 40);
-                var countdownNumberEl = document.getElementById(countids[usernum - 1]);
-                var countdown = time;
-                countdownNumberEl.textContent = countdown;
-                setInterval(function() {
-                    countdown = --countdown <= 0 ? countdown : countdown;
-                    countdownNumberEl.textContent = countdown;
+                    svg.append("text")	
+                    .attr("id", countids[usernum - 1])	
+                    .attr("x", data.operators[operatorId].left + texttopcor[usernum - 1] + 2)	
+                    .attr("y", data.operators[operatorId].top - 40);	
+                var countdownNumberEl = document.getElementById(countids[usernum - 1]);	
+                var countdown = time;	
+                countdownNumberEl.textContent = countdown;	
+                setInterval(function() {	
+                    countdown = --countdown <= 0 ? countdown : countdown;	
+                    countdownNumberEl.textContent = countdown;	
                 }, 1000);
             }
 
@@ -932,7 +634,7 @@
                 var countids = ["user1ct", "user2ct", "user3ct", "user4ct", "user5ct", "user6ct", "user7ct", "user8ct", "user9ct", "user10ct"];
                 var cirleftcor = [10, 32, 54, 76, 98, 10, 32, 54, 76, 98];
                 var textleftcor = [4, 24, 44, 64, 84, 4, 24, 44, 64, 84];
-                var usercol = ["#6ad7b9", "#d9f010", "#f008b6", "#20f00d", "#09f1f1", "#6ad7b9", "#d9f010", "#f008b6", "#20f00d", "#09f1f1"];
+                var usercol =  ["#6ad7b9", "#d9f010", "#f008b6", "#20f00d", "#09f1f1", "#6ad7b9", "#d9f010", "#f008b6", "#20f00d", "#09f1f1"];
                 var usertext = ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10"];
                 var data = $flowchart.flowchart('getData');
                 var svg = d3.select("#svgtag");
@@ -1001,6 +703,8 @@
             tojson
         };
         if (false) console.log('remove lint unused warning', defaultFlowchartData);
+
+       
     </script>
 </body>
 
