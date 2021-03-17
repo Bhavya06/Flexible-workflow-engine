@@ -815,9 +815,6 @@
                 console.log('finished wait');
             }
 
-            function alertFunc1() {
-                console.log('1');
-            };
 
             //var linkdataop = {}; //operatorIdfrom : operatorIdto
 
@@ -842,6 +839,15 @@
                     i1 = i1 + 2;
                 }
 
+                var un = 0;
+                console.log('@@@@@@@@@@@@@',user_no);
+                while(un<user_no)
+                {
+                    console.log("^^^^^^^^^^^",un);
+                    Execute_Workflow();
+                    un=un+1;
+                    pausecomp(1000);
+                }
             };
 
             $('#text_submit').click(Submit_text_file);

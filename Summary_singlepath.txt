@@ -1,4 +1,4 @@
-I want to make a @workflow: Demo.
+I want to make a @workflow: Demo. I want to execute @User:3.
 The first @Task: Task1 and @Time: 5 sec. 
 Next @Task: Task2 and @Time: 7 sec.
 Next @Task: Task3 and @Time: 4 sec.
