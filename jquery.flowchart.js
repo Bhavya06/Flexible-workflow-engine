@@ -8,6 +8,8 @@ if (!('remove' in Element.prototype)) {
     };
 }
 
+var linkopdata = {};
+
 jQuery(function($) {
     $.widget("flowchart.flowchart", {
         options: {
@@ -214,7 +216,7 @@ jQuery(function($) {
             this.redrawLinksLayer();
         },
 
-        textLink: function(fo,fc,to,tc){
+        textLink: function(fo, fc, to, tc) {
             var linkData = {
                 fromOperator: fo,
                 fromConnector: fc,
@@ -224,7 +226,7 @@ jQuery(function($) {
                 toSubConnector: 0
             };
             console.log('1111111111');
-            console.log(fo,fc,to,tc);
+            console.log(fo, fc, to, tc);
             this.addLink(linkData);
             console.log('----00000000--------');
         },

@@ -25,6 +25,62 @@
     <style>
         /* basic positioning */
         
+        #query1table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        #query1table td,
+        #query1table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        #query1table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #query1table tr:hover {
+            background-color: #ddd;
+        }
+        
+        #query1table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4cc7dd;
+            color: white;
+        }
+        
+        #query2table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        #query2table td,
+        #query2table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        #query2table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #query2table tr:hover {
+            background-color: #ddd;
+        }
+        
+        #query2table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4cc7dd;
+            color: white;
+        }
+        
         .modal {
             display: none;
             /* Hidden by default */
@@ -60,7 +116,7 @@
         /* The Close Button */
         
         .close {
-            color: #aaaaaa;
+            color: #250505;
             float: right;
             font-size: 28px;
             font-weight: bold;
@@ -311,9 +367,20 @@
         <label for="query2">Total time: </label><input id="query2" type="text">
     </span>
     <button class="btn btn-primary" id="query2_submit">Add</button>
+    <div id="myModalquery2" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1 id="query2_data"></h1>
+            <div id="query2table"></div>
+            <!-- <p id="display_data">Display logs</p> -->
+        </div>
+
+    </div>
 
     <!-- <h4 class="query1_data" id="query1_data">{{query1_data}}</h4> -->
-    <h4 class="query2_data" id="query2_data">{{query2_data}}</h4>
+    <!-- <h4 class="query2_data" id="query2_data">{{query2_data}}</h4> -->
     <span id="operator_properties" style="display: block;" class="create-task">
         <label for="operator_title">Task's title: </label><input id="operator_title" type="text">
         <label for="operator_time">Task's time: </label><input id="operator_time" type="text">
@@ -383,28 +450,55 @@
 
         //For query1
 
-        var modal = document.getElementById("myModalquery1");
+        var modal1 = document.getElementById("myModalquery1");
 
         // Get the button that opens the modal
-        var btn = document.getElementById("query1_submit");
+        var btn1 = document.getElementById("query1_submit");
 
         // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span1 = document.getElementsByClassName("close")[1];
 
         // When the user clicks on the button, open the modal
-        btn.onclick = function() {
-            modal.style.display = "block";
+        btn1.onclick = function() {
+            modal1.style.display = "block";
         }
 
         // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
+        span1.onclick = function() {
+            modal1.style.display = "none";
         }
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+            if (event.target == modal1) {
+                modal1.style.display = "none";
+            }
+        }
+
+        //For query 2
+
+        var modal2 = document.getElementById("myModalquery2");
+
+        // Get the button that opens the modal
+        var btn2 = document.getElementById("query2_submit");
+
+        // Get the <span> element that closes the modal
+        var span2 = document.getElementsByClassName("close")[2];
+
+        // When the user clicks on the button, open the modal
+        btn2.onclick = function() {
+            modal2.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span2.onclick = function() {
+            modal2.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal2) {
+                modal2.style.display = "none";
             }
         }
 
@@ -463,7 +557,7 @@
 
         $(document).ready(function() {
 
-            console.log(defaultFlowchartData);
+            //console.log(defaultFlowchartData);
             var $flowchart = $('#flowchartworkspace');
             var $container = $flowchart.parent();
 
@@ -641,8 +735,32 @@
                         data: JSON.stringify(query2_dict),
                         dataType: 'json'
                     }).done(function(returndata) {
-                        query2_data = "Estimated no.of users for " + $query2.val() + " sec is " + returndata[0]['finished_users'];
+                        query2_data = "Estimated no.of users for " + $query2.val() + " sec is " + returndata['finished_users'];
                         document.getElementById("query2_data").innerHTML = query2_data;
+                        query2_table = returndata["tabledata"];
+                        var table = document.createElement('table');
+                        var tr, td, row, cell;
+                        var numrow = parseInt(returndata["row"]);
+                        var numcell = parseInt(returndata["column"]);
+                        var headind = 0;
+                        for (row = 0; row < numrow + 1; row++) {
+                            tr = document.createElement('tr');
+                            for (cell = 0; cell < numcell; cell++) {
+                                if (row == 0) {
+                                    th = document.createElement('th');
+                                    tr.appendChild(th);
+                                    th.innerHTML = returndata["tableheader"][headind];
+                                    headind++;
+                                } else {
+                                    td = document.createElement('td');
+                                    tr.appendChild(td);
+                                    td.innerHTML = returndata["tabledata"][row - 1][cell];
+                                }
+                            }
+                            table.appendChild(tr);
+                        }
+                        //table.classList.add("table table-striped");
+                        document.getElementById("query2table").appendChild(table);
                     })
                     // $query2.val() = '';
                 console.log("QUERY 2");
@@ -700,17 +818,26 @@
                 console.log('1');
             };
 
+            //var linkdataop = {}; //operatorIdfrom : operatorIdto
 
             function alertFunc() {
                 var i1 = 0;
+                //var data = $flowchart.flowchart('getData');
                 while (i1 < l.length) {
                     fromTask = l[i1];
                     toTask = l[i1 + 1];
                     console.log('#######', fromTask, toTask);
+                    // if (dict1[fromTask] in linkdataop) {
+                    //     console.log(data.operators[linkdataop[dict1[fromTask]]].top);
+                    //     data.operators[linkdataop[dict1[fromTask]]].top = data.operators[linkdataop[dict1[fromTask]]].top - 20;
+                    //     data.operators[dict1[toTask]].top = data.operators[dict1[toTask]].top + 20;
+                    //     console.log("OMG R U CHANGING??")
+                    // }
+                    // linkdataop[dict1[fromTask]] = dict1[toTask];
                     console.log(dict1);
                     $flowchart.flowchart('textLink', dict1[fromTask], 'output_1', dict1[toTask], 'input_1');
                     // $flowchart.flowchart('textLink');
-                    console.log(dict1["abc0"])
+                    //console.log(dict1["abc0"])
                     i1 = i1 + 2;
                 }
 
@@ -728,7 +855,7 @@
                     var operatorId = operator_data['operatorId']['name'];
                     var operatorData = operator_data['operatorData'];
                     dict1[name1] = operatorId;
-                    //console.log("--------", operatorId, operatorData)
+                    console.log("--------", operatorId, operatorData)
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
                     change_title_task(operatorId, name1, time1);
                     taskoper[name1] = operatorId;
