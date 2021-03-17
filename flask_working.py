@@ -17,7 +17,7 @@ from flask_cors import CORS, cross_origin
 from IPython.display import HTML
 import numpy as np
 
-app = Flask(__name__,static_url_path="/",static_folder='C:/User/USER/Desktop/proj', template_folder='templates')
+app = Flask(__name__,static_url_path="/",static_folder='C:/Users/USER/Documents/GitHub/Flexible-workflow-engine', template_folder='templates')
 
 CORS(app, support_credentials=True)
 
@@ -84,7 +84,7 @@ def writetofile():
 
 @app.route('/read_file', methods = ["POST"])
 def Submit():
-    f = open("Tasks1.txt")
+    f = open("Tasks.txt")
     c=0
     task_data =""
     link_data = ""
@@ -231,7 +231,7 @@ def upload_file():
         global time_list
         time_list = time1
         workflow_name = workflow_name[0].upper() + workflow_name[1:]
-        f = open('Tasks1.txt', "w")
+        f = open('Tasks.txt', "w")
         f.write(workflow_name+'\n')
         f.write('TASKS\n')
         for i in range(len(tasks)):

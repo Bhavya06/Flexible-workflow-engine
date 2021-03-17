@@ -1,8 +1,0 @@
-TASK:
-Task0 10
-Task1 2
-Task2 20
-
-LINK:
-Task0 Task1
-Task1 Task2

@@ -779,6 +779,7 @@
                     url: 'http://localhost:5000/read_file'
                 }).done(function(returndata) {
                     console.log(returndata)
+                    user_no = returndata['un'];
                     workflow_name = returndata['wn'] + ' Workflow Engine';
                     document.getElementById("workflow_name").innerHTML = workflow_name;
                     task_data = returndata['td'];
