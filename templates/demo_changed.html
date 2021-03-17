@@ -295,24 +295,13 @@
         <label for="query1">No.of users: </label><input id="query1" type="text">
     </span>
     <button class="btn btn-primary" id="query1_submit">Add</button>
-    <div id="myModalquery1" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h1 id="query1_data"></h1>
-            <div id="query1table"></div>
-            <!-- <p id="display_data">Display logs</p> -->
-        </div>
-
-    </div>
 
     <span class="query2">
         <label for="query2">Total time: </label><input id="query2" type="text">
     </span>
     <button class="btn btn-primary" id="query2_submit">Add</button>
 
-    <!-- <h4 class="query1_data" id="query1_data">{{query1_data}}</h4> -->
+    <h4 class="query1_data" id="query1_data">{{query1_data}}</h4>
     <h4 class="query2_data" id="query2_data">{{query2_data}}</h4>
     <span id="operator_properties" style="display: block;" class="create-task">
         <label for="operator_title">Task's title: </label><input id="operator_title" type="text">
@@ -351,7 +340,6 @@
         let status = "stopped";
         var Worktasks = {};
 
-        //For display log
 
         var modal = document.getElementById("myModal");
 
@@ -365,35 +353,8 @@
         btn.onclick = function() {
             modal.style.display = "block";
             document.getElementById("display_data").innerHTML = displaydata;
-            //console.log("There 1??");
+            console.log("There 1??");
             disp = 1;
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        //For query1
-
-        var modal = document.getElementById("myModalquery1");
-
-        // Get the button that opens the modal
-        var btn = document.getElementById("query1_submit");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on the button, open the modal
-        btn.onclick = function() {
-            modal.style.display = "block";
         }
 
         // When the user clicks on <span> (x), close the modal
@@ -602,30 +563,6 @@
                     }).done(function(returndata) {
                         query1_data = "Estimated time for " + $query1.val() + " users is " + returndata['total_time'] + " sec";
                         document.getElementById("query1_data").innerHTML = query1_data;
-                        query1_table = returndata["tabledata"];
-                        var table = document.createElement('table');
-                        var tr, td, row, cell;
-                        var numrow = parseInt(returndata["row"]);
-                        var numcell = parseInt(returndata["column"]);
-                        var headind = 0;
-                        for (row = 0; row < numrow + 1; row++) {
-                            tr = document.createElement('tr');
-                            for (cell = 0; cell < numcell; cell++) {
-                                if (row == 0) {
-                                    th = document.createElement('th');
-                                    tr.appendChild(th);
-                                    th.innerHTML = returndata["tableheader"][headind];
-                                    headind++;
-                                } else {
-                                    td = document.createElement('td');
-                                    tr.appendChild(td);
-                                    td.innerHTML = returndata["tabledata"][row - 1][cell];
-                                }
-                            }
-                            table.appendChild(tr);
-                        }
-                        //table.classList.add("table table-striped");
-                        document.getElementById("query1table").appendChild(table);
                     })
                     // $query1.val() = '';
             };

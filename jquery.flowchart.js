@@ -8,7 +8,6 @@ if (!('remove' in Element.prototype)) {
     };
 }
 
-
 jQuery(function($) {
     $.widget("flowchart.flowchart", {
         options: {
@@ -215,7 +214,7 @@ jQuery(function($) {
             this.redrawLinksLayer();
         },
 
-        textLink: function(fo, fc, to, tc) {
+        textLink: function(fo,fc,to,tc){
             var linkData = {
                 fromOperator: fo,
                 fromConnector: fc,
@@ -225,7 +224,7 @@ jQuery(function($) {
                 toSubConnector: 0
             };
             console.log('1111111111');
-            console.log(fo, fc, to, tc);
+            console.log(fo,fc,to,tc);
             this.addLink(linkData);
             console.log('----00000000--------');
         },
@@ -679,8 +678,6 @@ jQuery(function($) {
 
             fullElement.operator.appendTo(this.objs.layers.operators);
             fullElement.operator.css({ top: operatorData.top, left: operatorData.left });
-            // posoftask = posoftask + 20;
-            // console.log(posoftask);
             fullElement.operator.data('operator_id', operatorId);
 
             this.data.operators[operatorId] = operatorData;

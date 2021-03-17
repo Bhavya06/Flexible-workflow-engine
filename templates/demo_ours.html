@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Task name is obv stored in the workflow right? Can I use that? -->
 
 <head>
     <title>Workflow</title>
@@ -14,9 +13,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- Flowchart CSS and JS -->
     <link rel="stylesheet" href="../jquery.flowchart.css">
@@ -24,54 +20,6 @@
 
     <style>
         /* basic positioning */
-        
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 100px;
-            /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            font-size: 20px;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-        /* Modal Content */
-        
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-        }
-        /* The Close Button */
-        
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
         
         .legend {
             list-style: none;
@@ -107,8 +55,8 @@
         }
         
         .flowchart-example-container {
-            width: 1480px;
-            height: 440px;
+            width: 920px;
+            height: 400px;
             background: white;
             border: 3px solid #0275d8;
             margin-bottom: 10px;
@@ -142,18 +90,8 @@
         
         .priority-user {
             margin-top: 10px;
-            margin-left: 250px;
-            /* margin-right:600px */
+            margin-left: 10px;
             font-family: "Times New Roman", Times, serif;
-            font-size: 18px;
-        }
-        
-        .choose-file {
-            margin-top: 10px;
-            margin-left: 1100px;
-            /* margin-right:600px */
-            /* font-family: "Times New Roman", Times, serif; */
-            /* font-size:18px; */
         }
         
         .title-logs {
@@ -177,9 +115,9 @@
         }
         
         .time {
-            margin-left: 1220px;
+            margin-left: 980px;
             position: absolute;
-            top: 5px;
+            top: 20px;
             /* right: 250px; */
             font-family: "Times New Roman", Times, serif;
             font-size: 34px;
@@ -191,7 +129,7 @@
         }
         
         #stopwatch {
-            margin-left: 1210px;
+            margin-left: 750px;
             position: absolute;
             width: 210px;
             height: 50px;
@@ -218,56 +156,53 @@
             00 : 00 : 00
         </div>
     </div>
-    <!-- <h1 class="title-workflow">Workflow Engine</h1> -->
-    <h1 id="workflow_name" class="title-workflow">{{workflow_name}} Workflow Engine</h1>
+    <h1 class="title-workflow">Workflow Engine</h1>
     <div id="chart_container">
         <div class="flowchart-example-container" id="flowchartworkspace">
-            <svg width="1700px" height="600px" id="svgtag"></svg>
-            <svg width="1700px" height="600px" id="userdisp"></svg>
+            <!-- <ul class="legend">
+                <li><span class="not_executing"></span> Not executing</li>
+                <li><span class="executing"></span> Executing</li>
+                <li><span class="completed_execution"></span> Completed execution</li>
+            </ul> -->
+            <!-- <h1>hello</h1> -->
+            <svg width="800px" height="400px" id="svgtag"></svg>
+            <svg width="800px" height="400px" id="userdisp"></svg>
         </div>
 
+        <h1 class="title-logs">Workflow Logs:</h1>
+        <div class="display_data" id="display_data"></div>
+        <!-- <button onclick="Display_logs()" class="btn btn-primary displaylogs margin-but">Display Logs</button> -->
+        <div>
+            <button onclick="Display_logs()" class="btn btn-primary displaylogs margin-but">Display Logs</button>
+            <button class="btn btn-primary" id="text_submit">Submit</button>
+        </div>
     </div>
     <div class="draggable_operators">
     </div>
     <button class="btn btn-primary create_operator margin-but" mdbWavesEffect>Create task</button>
     <button class="btn btn-primary delete_selected_button margin-but">Delete selected task / link</button>
-    <button class="btn btn-primary calculate_time margin-but" id="calculate_time">Calculate Time</button>
-    <button class="btn btn-primary execute_workflow margin-but" id="execute_workflow">Execute Workflow</button>
     <!-- <button class="btn btn-primary get_data margin-but" id="get_data">Get data</button> -->
-    <button id="myBtn" class="btn btn-primary margin-but" onclick="Display_logs()">Display Logs</button>
-
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h1>Workflow logs :</h1>
-            <p id="display_data">Display logs</p>
-        </div>
-
-    </div>
-    <!-- <button class="btn btn-primary margin-but" id="text_submit">Upload File</button> -->
-    <span class="priority-user">
+    <div class="priority-user">
         <label for="priority_user">Priority User: </label><input id="priority_user" type="text">
-    </span>
-    <button class="btn btn-primary" id="priority_submit">Add</button>
-    <span id="operator_properties" style="display: block;" class="create-task">
+        <button class="btn btn-primary" id="priority_submit">Submit</button>
+    </div>
+    <div id="operator_properties" style="display: block;" class="create-task">
         <label for="operator_title">Task's title: </label><input id="operator_title" type="text">
         <label for="operator_time">Task's time: </label><input id="operator_time" type="text">
-    </span>
+    </div>
     <!--<button class="set_data" id="set_data">Set data</button>-->
-    <span class="choose-file">
-        <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data" id="todo-form">
+    <div>
+        <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">
             <input class="btn btn-primary choosefile margin-but" type="file" name="file" />
-            <input type="submit" id="text_submit" class="btn btn-primary margin-but" />
+            <input type="submit" class="btn btn-primary margin-but" />
         </form>
+        <button class="btn btn-primary calculate_time margin-but" id="calculate_time">Calculate Time</button>
+        <button class="btn btn-primary execute_workflow margin-but" id="execute_workflow">Execute Workflow</button>
 
         <h4>
             <div id="display_time" class="time"></div>
         </h4>
-    </span>
-
+    </div>
     <!-- <div>
         <textarea rows="5" cols="40" id="flowchart_data" class="textbox"></textarea>
     </div> -->
@@ -289,56 +224,11 @@
         let interval = null;
 
         let status = "stopped";
-        var Worktasks = {};
 
-        $(document).on('submit', '#todo-form', function(e) {
-            console.log('hello');
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/',
-                data: {
-                    todo: $("#text_submit").val()
-                },
-                success: function() {
-                    alert('saved');
-                }
-            })
-        });
-
-
-        var modal = document.getElementById("myModal");
-
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-            modal.style.display = "block";
+        function Display_logs() {
             document.getElementById("display_data").innerHTML = displaydata;
-            console.log("There 1??");
             disp = 1;
         }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        //function Display_logs() {
-        //    document.getElementById("display_data").innerHTML = displaydata;
-        //    disp = 1;
-        //}
 
         function Stopwatch() {
 
@@ -525,19 +415,15 @@
                     url: 'http://localhost:5000/read_file'
                 }).done(function(returndata) {
                     console.log(returndata)
-                    workflow_name = returndata['wn'] + ' Workflow Engine';
-                    document.getElementById("workflow_name").innerHTML = workflow_name;
                     task_data = returndata['td'];
                     console.log(task_data)
                     link_data = returndata['ld'];
                     t = task_data.split(" ");
-                    //document.getElementById("display_data").innerHTML = t;
+                    document.getElementById("display_data").innerHTML = t;
                     var i1 = 0;
                     //console.log("--------",t.length);
                     while (i1 < t.length) {
                         create_task(t[i1], t[i1 + 1]);
-                        console.log('added task');
-                        pausecomp(1000);
                         // console.log("--------");
                         i1 = i1 + 2;
                     }
@@ -547,23 +433,11 @@
                     console.log("&&&&&", l);
                     setTimeout(alertFunc, 3000);
                 });
+
+
+
+
             }
-
-            function pausecomp(millis) {
-                console.log('started wait');
-                var date = new Date();
-                var curDate = null;
-                do {
-                    curDate = new Date();
-                }
-                while (curDate - date < millis);
-                console.log('finished wait');
-            }
-
-            function alertFunc1() {
-                console.log('1');
-            };
-
 
             function alertFunc() {
                 var i1 = 0;
@@ -635,7 +509,7 @@
             //-----------------------------------------
             //--- create operator button
             //--- start
-            var posoftask = 0;
+
             $flowchart.parent().siblings('.create_operator').click(function() {
                 $.ajax({
                     type: "POST",
@@ -643,11 +517,7 @@
                 }).done(function(operator_data) {
                     var operatorId = operator_data['operatorId']['name'];
                     var operatorData = operator_data['operatorData'];
-                    console.log(operatorData);
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
-                    //var data = $flowchart.flowchart('getData');
-                    //data.operators[operatorId].left = data.operators[operatorId].left + posoftask;
-                    //posoftask = posoftask + 20;
                 });
             });
             //--- end
@@ -725,7 +595,6 @@
 
             var dict = {};
             let user = 0;
-            var indexoftasks = 0;
 
             function Execute_Workflow() {
                 $.ajax({
@@ -734,25 +603,18 @@
                 });
                 var source = new EventSource('/execute_engine');
 
-
                 source.onmessage = function(e) {
                     if (e.data == ' ') {
                         source.close();
                     }
-
-
                     var d = new Date();
                     var s = d.toUTCString();
-                    $.post("http://localhost:5000/writetofile", {
-                        javascript_data: e.data
-                    });
                     if (e.data == ' ') {
                         displaydata = displaydata + e.data + "<br />";
 
                     } else {
                         displaydata = displaydata + s + "<br />" + e.data + "<br />";
                     }
-
                     if (disp == 1)
                         document.getElementById("display_data").innerHTML = displaydata;
                     //document.getElementById("display_data").innerHTML = displaydata;
@@ -773,20 +635,14 @@
 
 
 
-                    if (res[0] == "Started" && res[3] != "Workflow") {
-                        //console.log("You there??")
-                        if (!(res[3] in Worktasks)) {
-                            Worktasks[res[3]] = indexoftasks;
-                            indexoftasks++;
-                            console.log(Worktasks);
-                        }
-                        //task id
-                        var operatorId = 'created_operator_' + (parseInt(Worktasks[res[3]]));
+                    if (res[0] == "Started" && res[3].startsWith("Task")) {
+                        console.log("You there??")
+                        var operatorId = 'created_operator_' + (parseInt(res[3][4]) - 1);
                         var time = parseInt(res[6]);
                         userstart(operatorId, parseInt(res[10][4]), time);
-                    } else if (res[0] == "Finished" && res[3] != "Workflow") {
+                    } else if (res[0] == "Finished" && res[3].startsWith("Task")) {
                         userend(parseInt(res[10][4]));
-                        dict[res[10][4]] = parseInt(Worktasks[res[3]]) + 1;
+                        dict[res[10][4]] = parseInt(res[3][4]);
                     } else if (res[0] == "STARTED" && res[1] == "DELAY") {
                         var operatorId = 'created_operator_' + (dict[res[6][4]] - 1);
                         var countdown = parseInt(res[3]);

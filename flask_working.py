@@ -12,8 +12,10 @@ import nltk
 nltk.download('stopwords')
 import string
 import multiprocessing
-
+import pandas as pd
 from flask_cors import CORS, cross_origin
+from IPython.display import HTML
+import numpy as np
 
 app = Flask(__name__,static_url_path="/",static_folder='D:/Notes/Flexible-workflow-engine', template_folder='templates')
 
@@ -139,11 +141,12 @@ def upload_file():
         a = ''
         for s in flist:
             a = a + ' ' + s.rstrip('\n')
-        print("!!!!!!!!!!!!", a)
+        #print("!!!!!!!!!!!!", a)
         b = remove_stopwords(a.lower())
         b = b.replace("sec",'')
-        print(b)
+        #print(b)
         workflow_name = ''
+        global tasks
         tasks = []
         time = []
         link = []
@@ -194,23 +197,23 @@ def upload_file():
                                 else:
                                     for k in range(0,len(prev)):
                                         link.append([prev[k],temp[-1]])
-                                        print('$$$$$$',link)
+                                        #print('$$$$$$',link)
                             else:
                                 temp.append(tasks[-1])
                                 link.append([prev[0],temp[-1]])
                                 or_flag = 0
-                        print('******', prev)
-                        print("*****",temp)
+                        # print('******', prev)
+                        # print("*****",temp)
                 if(or_pos!=-1 and or_pos<fs):
                     i=or_pos+1+ind+1+i
                 else:
                     i=fs+1+ind+1+i
             else:
                 i=i+1
-        print(workflow_name)
-        print(tasks)
-        print(time)
-        print(link)
+        # print(workflow_name)
+        # print(tasks)
+        # print(time)
+        # print(link)
         global time_list
         time_list = time
         workflow_name = workflow_name[0].upper() + workflow_name[1:]
@@ -222,7 +225,7 @@ def upload_file():
         f.write('LINK\n')
         for i in link:
             f.write(i[0] + ' '+i[1]+'\n')
-        return render_template('demo.html')
+    return render_template('demo.html')
 
 @app.route("/start",methods=["GET"])
 def start():
@@ -247,7 +250,7 @@ def add_operator():
     global taskposleft
     operatorId = 'created_operator_' + str(operatorI)
     operatorData = {
-        "top": 60 + taskpostop,
+        "top": 130,
         "left": 20 + taskposleft,
         "properties": {
             "title": 'Task' + str(operatorI + 1),
@@ -378,9 +381,9 @@ def query1():
     data_dic=json.loads(data)
     no_of_users = data_dic['no_of_users']
     global time_list
-    l = time_list
+    l = time_list.copy()
     l.insert(0,0)#l=[0,5,7,4,2]
-    print(':::',no_of_users)
+    #print(':::',no_of_users)
     n = int(float(no_of_users))
     executing_tasks = [1]
     for i in range(len(l)):
@@ -398,7 +401,13 @@ def query1():
             current_user.append(0)
     for i in range(2,n+1):
         queue[1].append(i)
-    print(queue, current_user, l, executing_tasks, wait_time)
+    #print('QUERY1',queue, current_user, l, executing_tasks, wait_time)
+    global tasks
+    
+    val = {}
+    val['User1'] = {}
+    val['User1'][tasks[0]] = [0]
+    #print('User1 Started ' + tasks[0]+ ' 0')
     while(executing_tasks):
         m = min(wait_time)
         #print(m)
@@ -410,6 +419,9 @@ def query1():
             new_temp = {}
             flag = 0
             if(wait_time[i]==0):
+                #print('User'+ str(current_user[task])+' Finished '+tasks[task-1]+' '+ str(total_time))
+                #print(val)
+                val['User'+ str(current_user[task])][tasks[task-1]].append(total_time)
                 if(task!=len(l)-1):
                     if(current_user[task+1]==0):
                         current_user[task+1] = current_user[task]
@@ -417,6 +429,11 @@ def query1():
                         wait_time.insert(i+1, l[task+1])
                         flag = 1
                         i=i+1
+                        #print('User'+ str(current_user[task+1])+' Started '+tasks[task]+' '+ str(total_time))
+                        #print(val)
+                        if('User'+ str(current_user[task]) not in val):
+                            val['User'+ str(current_user[task])] = {}
+                        val['User'+ str(current_user[task+1])][tasks[task]] = [total_time]
                     else:
                         queue[task+1].append(current_user[task])
                     
@@ -425,6 +442,13 @@ def query1():
                 if(queue[task] !=[]):
                     new_user = queue[task].pop(0)
                     current_user[task] = new_user
+                    #print('User'+str(current_user[task])+' Started ' +tasks[task-1] +'  '+ str(total_time))
+                    #print(val)
+                    if('User'+ str(current_user[task]) not in val):
+                        val['User'+ str(current_user[task])] = {}
+                    if(tasks[task-1] not in val['User'+ str(current_user[task])]):
+                        val['User'+ str(current_user[task])][tasks[task-1]] = {}
+                    val['User'+ str(current_user[task])][tasks[task-1]] = [total_time]
                     if(flag == 1):
                         wait_time[i-1] = l[task]
                     else:
@@ -443,13 +467,38 @@ def query1():
         # print('min',m)
         # print('***',executing_tasks,'\t', wait_time)
         # print('$$$',current_user,'\t',queue)
-    print(total_time)
-    
-    val = {}
-    val["total_time"] = str(total_time)
-    resp = jsonify(val)
+    # print(total_time)
+    # print(val)
+    # print(val)
+    val1 = {}
+    df = pd.DataFrame.from_dict(val)
+    print(df)
+    ls = df.values.tolist()
+    tasknames = list(val["User1"].keys())
+    for i in range(0,len(ls)):
+        ls[i].insert(0,tasknames[i])
+
+    usernames = list(val.keys())
+    usernames.insert(0,"Tasknames")
+
+    print(len(usernames))
+    print(" ------ ")
+    print(ls, len(ls[0]))
+
+
+
+    # print(df.to_html())
+    # HTML(df.to_html(classes='table table-striped'))
+    # val1['query1_details'] = df.to_html()
+    val1["total_time"] = str(total_time)
+    val1["tabledata"] = ls
+    val1["row"] = len(ls)
+    val1["column"] = len(ls[0])
+    val1["tableheader"] = usernames
+    resp = jsonify(val1)
     resp.headers['Access-Control-Allow-Origin']='*'
     return resp
+    # return render_template('demo.html',tables=[df.to_html(classes='data')],titles=['title'])
 
 
 @app.route("/query2",methods=["POST"])
@@ -460,14 +509,14 @@ def query2():
     data_dic=json.loads(data)
     time = data_dic['total_time']
     global time_list
-    l = time_list
+    l = time_list.copy()
     l.insert(0,0)#l=[0,5,7,4,2]
     n = int(float(time))
     executing_tasks = [1]
     for i in range(len(l)):
         l[i] = int(l[i])
     wait_time = [l[1]]
-    current_user = []#
+    current_user = []
     queue = []
     finished_users = 0
     add_user = 2
@@ -478,7 +527,8 @@ def query2():
             current_user.append(1)
         else:
             current_user.append(0)
-    
+    print(current_user, queue, wait_time, executing_tasks)
+    #print('User1 Started ' + tasks[0]+ ' 0')
     while(executing_tasks and total_time < n):
         m = min(wait_time)
         total_time = total_time+m
@@ -531,14 +581,13 @@ def query2():
     if(total_time > n):
         finished_users = finished_users-1
     print(finished_users)
-    val = {}
-    val["finished_users"] = str(finished_users)
-    resp = jsonify(val)
+    val1 = {}
+    print("QUERY 2")
+    val1["finished_users"] = str(finished_users)
+    resp = jsonify(val1)
     resp.headers['Access-Control-Allow-Origin']='*'
+    
     return resp
-
-
-
 
 @app.route("/delete_operator",methods=["DELETE"])
 def delete_operator():
@@ -707,6 +756,8 @@ def execute_node(current_node):
     
 global tasks_to_do
 tasks_to_do = []
+global tasks
+tasks = []
 
 @app.route("/execute_engine",methods=["GET"])  
 def execute_engine(): 

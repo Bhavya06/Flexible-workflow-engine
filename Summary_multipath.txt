@@ -1,0 +1,5 @@
+I want to make a @workflow: Demo. 
+The first @Task: Task1 and @Time: 5 sec. 
+Next @Task: Task2 and @Time: 7 sec
+OR @Task: Task3 and @Time: 6 sec.
+Final task is @Task: Task4 and @Time: 4 sec.
