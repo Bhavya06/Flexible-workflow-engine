@@ -780,6 +780,7 @@
                 }).done(function(returndata) {
                     console.log(returndata)
                     user_no = returndata['un'];
+                    start_time_user = returndata['stu'];
                     workflow_name = returndata['wn'] + ' Workflow Engine';
                     document.getElementById("workflow_name").innerHTML = workflow_name;
                     task_data = returndata['td'];
@@ -820,35 +821,35 @@
 
             function alertFunc() {
                 var i1 = 0;
-                //var data = $flowchart.flowchart('getData');
+                un = 0;
                 while (i1 < l.length) {
                     fromTask = l[i1];
                     toTask = l[i1 + 1];
                     console.log('#######', fromTask, toTask);
-                    // if (dict1[fromTask] in linkdataop) {
-                    //     console.log(data.operators[linkdataop[dict1[fromTask]]].top);
-                    //     data.operators[linkdataop[dict1[fromTask]]].top = data.operators[linkdataop[dict1[fromTask]]].top - 20;
-                    //     data.operators[dict1[toTask]].top = data.operators[dict1[toTask]].top + 20;
-                    //     console.log("OMG R U CHANGING??")
-                    // }
-                    // linkdataop[dict1[fromTask]] = dict1[toTask];
                     console.log(dict1);
                     $flowchart.flowchart('textLink', dict1[fromTask], 'output_1', dict1[toTask], 'input_1');
-                    // $flowchart.flowchart('textLink');
-                    //console.log(dict1["abc0"])
                     i1 = i1 + 2;
                 }
+                setTimeout(alertFunc1, 3000);
 
-                var un = 0;
-                console.log('@@@@@@@@@@@@@',user_no);
-                while(un<user_no)
+            };
+
+            function alertFunc1() {
+                console.log("3333444445555")
+                if(un<user_no)
                 {
-                    console.log("^^^^^^^^^^^",un);
-                    Execute_Workflow();
+                    Execute_Workflow();       
                     un=un+1;
-                    pausecomp(1000);
+                    if(un!=user_no)
+                    {
+                        t = start_time_user[un] * 1000;
+                        console.log('############',t);
+                        setTimeout(alertFunc1, t);    
+                    }
+                   
                 }
             };
+
 
             $('#text_submit').click(Submit_text_file);
 

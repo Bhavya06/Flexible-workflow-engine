@@ -66,6 +66,8 @@ time_list =[]
 taskpostop = 0
 taskposleft = 0
 global user_no
+global start_time_user
+start_time_user = []
 
 app.config['UPLOAD_FOLDER'] = 'C:/User/USER/Desktop/proj'
 app.config['MAX_CONTENT_PATH'] = 1000000
@@ -118,7 +120,7 @@ def Submit():
     val["ld"] = str(link_data)
     val["wn"] = str(workflow_name)
     val["un"] = str(user_data)
-
+    val["stu"] = start_time_user
     resp = jsonify(val)
     resp.headers['Access-Control-Allow-Origin']='*'
     return resp
@@ -165,6 +167,8 @@ def upload_file():
         or_pos = -1
         global user_no
         user_no = 0
+        global start_time_user
+        start_time_user = []
         while(i<len(b)):
             if(b[i] == "@"):
                 ind = b[i:].index(":")
@@ -176,6 +180,16 @@ def upload_file():
                     fs = b[i+ind+1:].index('.')
                     user_no = b[ind+2+i-1:i+ind+1+fs]
                     print("*************%",user_no)
+                    for k in range(0,int(user_no)):
+                        start_time_user.append(1)
+                elif(word=='time'):
+                    fs = b[i+ind+1:].index('.')
+                    start_times = b[ind+2+i-1:i+ind+1+fs].split(',')
+                    for k in range(0,len(start_times)):
+                        if(k!=0):
+                            start_time_user[k] = max(int(start_times[k])-int(start_times[k-1]),1)
+                        else:
+                            start_time_user[k] = int(start_times[k])
                 elif(word=='task'):
                     at = b[i+ind+1:].index('@')
                     tasks.append(b[i+ind+2:at+ind+i])
@@ -228,6 +242,7 @@ def upload_file():
         # print(tasks)
         # print(time)
         # print(link)
+        print('!!!!!!!!!!!!!!!!!!!*****************',start_time_user)
         global time_list
         time_list = time1
         workflow_name = workflow_name[0].upper() + workflow_name[1:]
