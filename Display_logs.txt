@@ -1,36 +1,44 @@
 Started execution of Workflow Engine TEST
 Started execution of task1 [ Time: 5 ]  for User1
+Started execution of Workflow Engine TEST
+Started execution of Workflow Engine TEST
+Started execution of Workflow Engine TEST
 Finished execution of task1 [ Time: 5 ]  for User1
-Started execution of task3 [ Time: 6 ]  for User1
-Finished execution of task3 [ Time: 6 ]  for User1
-Started execution of task4 [ Time: 4 ]  for User1
-Finished execution of task4 [ Time: 4 ]  for User1
-Finished execution of Workflow Engine TEST
- 
-Started execution of Workflow Engine TEST
 Started execution of task1 [ Time: 5 ]  for User2
-Started execution of Workflow Engine TEST
-Started execution of Workflow Engine TEST
+Started execution of task2 [ Time: 7 ]  for User1
 Finished execution of task1 [ Time: 5 ]  for User2
 Started execution of task1 [ Time: 5 ]  for User3
-Started execution of task3 [ Time: 6 ]  for User2
+Finished execution of task2 [ Time: 7 ]  for User1
+Started execution of task3 [ Time: 4 ]  for User1
+Started execution of task2 [ Time: 7 ]  for User2
 Finished execution of task1 [ Time: 5 ]  for User3
 Started execution of task1 [ Time: 5 ]  for User4
-Finished execution of task3 [ Time: 6 ]  for User2
-Started execution of task4 [ Time: 4 ]  for User2
-Finished execution of task4 [ Time: 4 ]  for User2
-Finished execution of task1 [ Time: 5 ]  for User4
-Started execution of task3 [ Time: 6 ]  for User4
+Finished execution of task3 [ Time: 4 ]  for User1
+Started execution of task4 [ Time: 2 ]  for User1
+Finished execution of task4 [ Time: 2 ]  for User1
+Finished execution of task2 [ Time: 7 ]  for User2
 Started execution of task2 [ Time: 7 ]  for User3
-Finished execution of task3 [ Time: 6 ]  for User4
+Started execution of task3 [ Time: 4 ]  for User2
+Finished execution of task1 [ Time: 5 ]  for User4
+Finished execution of task3 [ Time: 4 ]  for User2
+Started execution of task4 [ Time: 2 ]  for User2
+Finished execution of task4 [ Time: 2 ]  for User2
 Finished execution of task2 [ Time: 7 ]  for User3
-Started execution of task4 [ Time: 4 ]  for User3
+Started execution of task3 [ Time: 4 ]  for User3
+Started execution of task2 [ Time: 7 ]  for User4
+Finished execution of task3 [ Time: 4 ]  for User3
+Started execution of task4 [ Time: 2 ]  for User3
+Finished execution of task4 [ Time: 2 ]  for User3
+Finished execution of task2 [ Time: 7 ]  for User4
+Started execution of task3 [ Time: 4 ]  for User4
+Finished execution of task3 [ Time: 4 ]  for User4
+Started execution of task4 [ Time: 2 ]  for User4
+Finished execution of Workflow Engine TEST
 Finished execution of Workflow Engine TEST
 Finished execution of Workflow Engine TEST
  
  
-Finished execution of task4 [ Time: 4 ]  for User3
-Started execution of task4 [ Time: 4 ]  for User4
-Finished execution of task4 [ Time: 4 ]  for User4
+ 
+Finished execution of task4 [ Time: 2 ]  for User4
 Finished execution of Workflow Engine TEST
  

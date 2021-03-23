@@ -728,6 +728,9 @@
                             table.appendChild(tr);
                         }
                         //table.classList.add("table table-striped");
+                        if (document.getElementById("query1table").hasChildNodes()) {
+                            document.getElementById("query1table").removeChild(document.getElementById("query1table").childNodes[0]);
+                        }
                         document.getElementById("query1table").appendChild(table);
                     })
                     // $query1.val() = '';
@@ -769,6 +772,9 @@
                             table.appendChild(tr);
                         }
                         //table.classList.add("table table-striped");
+                        if (document.getElementById("query2table").hasChildNodes()) {
+                            document.getElementById("query2table").removeChild(document.getElementById("query2table").childNodes[0]);
+                        }
                         document.getElementById("query2table").appendChild(table);
                     })
                     // $query2.val() = '';
