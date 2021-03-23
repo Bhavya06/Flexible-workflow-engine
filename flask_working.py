@@ -17,7 +17,7 @@ from flask_cors import CORS, cross_origin
 from IPython.display import HTML
 import numpy as np
 
-app = Flask(__name__,static_url_path="/",static_folder='C:/Users/USER/Documents/GitHub/Flexible-workflow-engine', template_folder='templates')
+app = Flask(__name__,static_url_path="/",static_folder='D:/Notes/Flexible-workflow-engine', template_folder='templates')
 
 CORS(app, support_credentials=True)
 
@@ -69,7 +69,7 @@ global user_no
 global start_time_user
 start_time_user = []
 
-app.config['UPLOAD_FOLDER'] = 'C:/User/USER/Desktop/proj'
+app.config['UPLOAD_FOLDER'] = 'D:/Notes/Flexible-workflow-engine'
 app.config['MAX_CONTENT_PATH'] = 1000000
 
 

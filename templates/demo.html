@@ -258,16 +258,24 @@
         .time {
             /* margin-left: 800px; */
             position: absolute;
-            bottom:600px;
+            bottom: 600px;
             right: 25px;
             font-family: "Times New Roman", Times, serif;
             font-size: 34px;
-            
         }
+        
         .query1_data {
             top: 470px;
             margin-left: 1100px;
             font-size: 24px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif
+        }
+        
+        .userfinish {
+            top: 120px;
+            margin-left: 1300px;
+            font-size: 18px;
             position: absolute;
             font-family: "Times New Roman", Times, serif
         }
@@ -312,7 +320,7 @@
         <div id="stopwatch">
             00 : 00 : 00
         </div>
-    </div>	
+    </div>
     <!-- <h1 class="title-workflow">Workflow Engine</h1> -->
     <h1 id="workflow_name" class="title-workflow">{{workflow_name}} Workflow Engine</h1>
     <div id="chart_container">
@@ -379,7 +387,8 @@
 
     </div>
 
-    <!-- <h4 class="query1_data" id="query1_data">{{query1_data}}</h4> -->
+    <h4 class="userfinish" id="userfinish"></h4>
+    <!-- <h4 class="query1_data" id="query1_data">wot</h4> -->
     <!-- <h4 class="query2_data" id="query2_data">{{query2_data}}</h4> -->
     <span id="operator_properties" style="display: block;" class="create-task">
         <label for="operator_title">Task's title: </label><input id="operator_title" type="text">
@@ -836,17 +845,15 @@
 
             function alertFunc1() {
                 console.log("3333444445555")
-                if(un<user_no)
-                {
-                    Execute_Workflow();       
-                    un=un+1;
-                    if(un!=user_no)
-                    {
+                if (un < user_no) {
+                    Execute_Workflow();
+                    un = un + 1;
+                    if (un != user_no) {
                         t = start_time_user[un] * 1000;
-                        console.log('############',t);
-                        setTimeout(alertFunc1, t);    
+                        console.log('############', t);
+                        setTimeout(alertFunc1, t);
                     }
-                   
+
                 }
             };
 
@@ -854,6 +861,7 @@
             $('#text_submit').click(Submit_text_file);
 
             var taskoper = {}
+            var lasttask;
 
             function create_task(name1, time1) {
                 $.ajax({
@@ -867,6 +875,7 @@
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
                     change_title_task(operatorId, name1, time1);
                     taskoper[name1] = operatorId;
+                    lasttask = name1;
                 });
             }
 
@@ -922,7 +931,8 @@
                     var name1 = operatorData['properties']['title'].split(" ");
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
                     console.log("Here is what we got", name1[0], operatorId);
-                    taskoper[name1[0]] = operatorId
+                    taskoper[name1[0]] = operatorId;
+                    lasttask = name1[0];
                 });
             });
             //--- end
@@ -1001,6 +1011,7 @@
             var dict = {};
             let user = 0;
             var indexoftasks = 0;
+            var userendisp = '';
 
             function Execute_Workflow() {
                 $.ajax({
@@ -1064,6 +1075,10 @@
                         userend(parseInt(res[10][4]));
                         dict[res[10][4]] = taskoper[res[3]];
                         console.log("This is for delay", dict);
+                        if (res[3] == lasttask) {
+                            userendisp = userendisp + res[10] + ' finished execution' + "<br />";
+                            document.getElementById("userfinish").innerHTML = userendisp;
+                        }
                     } else if (res[0] == "STARTED" && res[1] == "DELAY") {
                         var operatorId = dict[res[6][4]];
                         var countdown = parseInt(res[3]);
