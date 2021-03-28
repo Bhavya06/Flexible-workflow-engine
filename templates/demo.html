@@ -197,32 +197,36 @@
         }
         
         .priority-user {
-            margin-top: 10px;
-            margin-left: 250px;
+            position: absolute;
+            top: 610px;
+            left: 9px;
             /* margin-right:600px */
             font-family: "Times New Roman", Times, serif;
             font-size: 18px;
         }
         
         .query1 {
-            margin-top: 10px;
-            margin-left: 1100px;
-            /* margin-right:600px; */
+            position: absolute;
+            top: 610px;
+            left: 420px;
+            /* margin-right:600px */
             font-family: "Times New Roman", Times, serif;
             font-size: 18px;
         }
         
         .query2 {
-            margin-top: 10px;
-            margin-left: 1100px;
-            /* margin-right:600px; */
+            position: absolute;
+            top: 610px;
+            left: 820px;
+            /* margin-right:600px */
             font-family: "Times New Roman", Times, serif;
             font-size: 18px;
         }
         
         .choose-file {
-            top: 596px;
-            left: 1px;
+            /* position: absolute; */
+            top: 555px;
+            left:720px;
             position: absolute;
             /* margin-right:600px; */
             /* font-family: "Times New Roman", Times, serif; */
@@ -230,6 +234,7 @@
         }
         
         .choose-file-submit {
+
             top: 2px;
             left: 300px;
             position: absolute;
@@ -251,15 +256,15 @@
         .create-task {
             font-family: "Times New Roman", Times, serif;
             margin-left: 10px;
-            margin-top: 15px;
+            margin-top: 55px;
             font-size: 16px;
         }
         
         .time {
             /* margin-left: 800px; */
             position: absolute;
-            bottom: 600px;
-            right: 25px;
+            top: 10px;
+            right: 125px;
             font-family: "Times New Roman", Times, serif;
             font-size: 34px;
         }
@@ -287,7 +292,19 @@
             position: absolute;
             font-family: "Times New Roman", Times, serif
         }
-        
+        .upload-file
+        {
+            top: 1px;
+            left:380px;
+            position: absolute;
+
+        }
+        .link-button
+        {
+            top: 15px;
+            left:380px;
+            position: absolute;
+        }
         .textbox {
             padding: 5px 0 0 5px;
             margin-left: 10px;
@@ -350,15 +367,24 @@
         </div>
 
     </div>
-    <button class="btn btn-primary margin-but" id="text_submit">Upload File</button>
+    <span class="choose-file">	
+        <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">	
+            <input class="btn btn-primary margin-but" type="file" name="file" />	
+            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>	
+        </form>
+    <button type="button" class="btn btn-link link-button"id="text_submit">Upload file         </button>
+    </span>	
+    <!-- <button class="btn btn-primary margin-but" id="text_submit">Upload File</button> -->
     <span class="priority-user">
         <label for="priority_user">Priority User: </label><input id="priority_user" type="text">
-    </span>
     <button class="btn btn-primary" id="priority_submit">Add</button>
+    </span>
     <span class="query1">
         <label for="query1">No.of users: </label><input id="query1" type="text">
-    </span>
     <button class="btn btn-primary" id="query1_submit">Add</button>
+        
+    </span>
+    <!-- <button class="btn btn-primary" id="query1_submit">Add</button> -->
     <div id="myModalquery1" class="modal">
 
         <!-- Modal content -->
@@ -373,8 +399,10 @@
 
     <span class="query2">
         <label for="query2">Total time: </label><input id="query2" type="text">
+        <button class="btn btn-primary" id="query2_submit">Add</button>
+
     </span>
-    <button class="btn btn-primary" id="query2_submit">Add</button>
+    <!-- <button class="btn btn-primary" id="query2_submit">Add</button> -->
     <div id="myModalquery2" class="modal">
 
         <!-- Modal content -->
@@ -395,15 +423,16 @@
         <label for="operator_time">Task's time: </label><input id="operator_time" type="text">
     </span>
     <!--<button class="set_data" id="set_data">Set data</button>-->
-    <span class="choose-file">	
+    <!-- <span class="choose-file">	
         <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">	
             <input class="btn btn-primary margin-but" type="file" name="file" />	
             <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>	
-        </form>	
+        </form>
+    </span>	 -->
         <h6>	
             <div id="display_time" class="time"></div>	
         </h6>	
-    </span>
+    
 
 
 
