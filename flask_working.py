@@ -17,7 +17,7 @@ from flask_cors import CORS, cross_origin
 from IPython.display import HTML
 import numpy as np
 
-app = Flask(__name__,static_url_path="/",static_folder='D:/Notes/Flexible-workflow-engine', template_folder='templates')
+app = Flask(__name__,static_url_path="/",static_folder='D:/Notes/proj/Flexible-workflow-engine', template_folder='templates')
 
 CORS(app, support_credentials=True)
 
@@ -68,8 +68,10 @@ taskposleft = 0
 global user_no
 global start_time_user
 start_time_user = []
+global add_random_delay 
+add_random_delay = False
 
-app.config['UPLOAD_FOLDER'] = 'D:/Notes/Flexible-workflow-engine'
+app.config['UPLOAD_FOLDER'] = 'D:/Notes/proj/Flexible-workflow-engine'
 app.config['MAX_CONTENT_PATH'] = 1000000
 
 
@@ -268,6 +270,12 @@ def start():
     result['operators'] = {}
     result['links'] = {}
     return render_template('demo.html',  data=result)
+
+@app.route("/random_delay",methods=["POST"])
+def random_delay():
+    global add_random_delay
+    add_random_delay = True
+    return render_template('demo.html')
 
 @app.route("/add_operator",methods=["POST"])
 @cross_origin(supports_credentials=True)
@@ -810,6 +818,7 @@ def execute_node(current_node):
         #     print("CURRENT   LINK",current_node.title,prev_link)
         # else:
         #     print("CURRENT   LINK",current_node.title,prev_link.id,current_node.not_executed)
+        # print("Stuff yet to execute ------------- ", current_node.title ,current_node.not_executed)
         if(prev_link == []):
             #print("IN IF")
             while(current_node.jobs>0 and current_node.not_executed != [] and current_node.is_executing==False):
@@ -818,12 +827,18 @@ def execute_node(current_node):
                 else:
                     myeng.is_executing=False
                 not_exec = current_node.not_executed.pop(0)
+                # print("Stuff yet to execute ------------- ", current_node.title ,current_node.not_executed)
                 current_node.executing_user = not_exec
                 current_node.is_executing = True
                 val = "Started execution of" +" "+current_node.title+" for "+not_exec+ "\n"
                 yield "data: %s\n\n" % (val)
+                # resultpass = " ".join(current_node.not_executed)
+                for i in current_node.not_executed:
+                    yield "data: %s %s\n\n" %(i,current_node.title)
+                # yield "nodes: %s\n\n" %(current_node.not_executed)
                 time.sleep(0.1)
                 print("Started execution of" +" "+current_node.title+" for "+not_exec)
+                # print("Stuff yet to execute ------------- ", current_node.title ,current_node.not_executed)
                 time.sleep(current_node.time)
                 val = "Finished execution of" +" "+current_node.title+" for "+not_exec+ "\n"
                 yield "data: %s\n\n" % (val)
@@ -853,28 +868,33 @@ def execute_node(current_node):
                 not_exec = current_node.not_executed.pop(0)
                 current_node.executing_user = not_exec
                 current_node.is_executing = True
-                random_no = random.randint(1,3)
-                #print(random_no)
-                # if(random_no == 1):
-                #     random_delay = random.randint(2,7)
-                #     current_node.wait_time += random_delay
-                #     val = "STARTED DELAY of "+str(random_delay)+" sec for "+not_exec+ "\n"
-                #     yield "data: %s\n\n" % (val)
-                #     time.sleep(0.1)
-                #     print("STARTED DELAY of "+str(random_delay)+" sec for "+not_exec)
-                #     time.sleep(random_delay)
-                #     val = "FINISHED DELAY of "+str(random_delay)+" sec for "+ not_exec+ "\n"
-                #     yield "data: %s\n\n" % (val)
-                #     time.sleep(0.1)
-                #     print("FINISHED DELAY of "+str(random_delay)+" sec for "+not_exec)
-                #     current_node.wait_time -= random_delay
-                
+                global add_random_delay
+                if(add_random_delay):
+                    random_no = random.randint(1,5)
+                    print(random_no)
+                    if(random_no == 1):
+                        random_delay = random.randint(2,7)
+                        current_node.wait_time += random_delay
+                        val = "STARTED DELAY of "+str(random_delay)+" sec for "+not_exec+ "\n"
+                        yield "data: %s\n\n" % (val)
+                        time.sleep(0.1)
+                        print("STARTED DELAY of "+str(random_delay)+" sec for "+not_exec)
+                        time.sleep(random_delay)
+                        val = "FINISHED DELAY of "+str(random_delay)+" sec for "+ not_exec+ "\n"
+                        yield "data: %s\n\n" % (val)
+                        time.sleep(0.1)
+                        print("FINISHED DELAY of "+str(random_delay)+" sec for "+not_exec)
+                        current_node.wait_time -= random_delay
+                    
                 val = "Started execution of" +" "+current_node.title+" for "+not_exec+ "\n"
                 yield "data: %s\n\n" % (val)
+                for i in current_node.not_executed:
+                    yield "data: %s %s\n\n" %(i,current_node.title)
                 time.sleep(0.1)
                 print("Started execution of" +" "+current_node.title+" for "+not_exec)
                 time.sleep(current_node.time)
                 val = "Finished execution of" +" "+current_node.title+" for "+not_exec+ "\n"
+                # print("Stuff yet to execute ------------- ", current_node.title ,current_node.not_executed)
                 yield "data: %s\n\n" % (val)
                 time.sleep(0.1)
                 print("Finished execution of" +" "+current_node.title+" for "+not_exec)

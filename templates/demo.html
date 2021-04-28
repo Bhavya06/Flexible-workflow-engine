@@ -226,7 +226,7 @@
         .choose-file {
             /* position: absolute; */
             top: 555px;
-            left:720px;
+            left: 845px;
             position: absolute;
             /* margin-right:600px; */
             /* font-family: "Times New Roman", Times, serif; */
@@ -234,7 +234,6 @@
         }
         
         .choose-file-submit {
-
             top: 2px;
             left: 300px;
             position: absolute;
@@ -274,7 +273,7 @@
             margin-left: 1100px;
             font-size: 24px;
             position: absolute;
-            font-family: "Times New Roman", Times, serif
+            font-family: "Times New Roman", Times, serif;
         }
         
         .userfinish {
@@ -282,7 +281,125 @@
             margin-left: 1300px;
             font-size: 18px;
             position: absolute;
-            font-family: "Times New Roman", Times, serif
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+         :root {
+            --leftcor: 0px;
+            --topcor1g: 0px;
+            --topcor1r: 0px;
+        }
+        
+        #greentask1 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask1 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greentask2 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask2 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greentask3 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask3 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greentask4 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask4 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greentask5 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask5 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greentask6 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask6 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greentask7 {
+            top: var(--topcor1g);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #redtask7 {
+            top: var(--topcor1r);
+            margin-left: var(--leftcor);
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
         }
         
         .query2_data {
@@ -292,19 +409,19 @@
             position: absolute;
             font-family: "Times New Roman", Times, serif
         }
-        .upload-file
-        {
+        
+        .upload-file {
             top: 1px;
-            left:380px;
+            left: 380px;
             position: absolute;
-
         }
-        .link-button
-        {
+        
+        .link-button {
             top: 15px;
-            left:380px;
+            left: 380px;
             position: absolute;
         }
+        
         .textbox {
             padding: 5px 0 0 5px;
             margin-left: 10px;
@@ -353,8 +470,11 @@
     <button class="btn btn-primary delete_selected_button margin-but">Delete selected task / link</button>
     <button class="btn btn-primary calculate_time margin-but" id="calculate_time">Calculate Time</button>
     <button class="btn btn-primary execute_workflow margin-but" id="execute_workflow">Execute Workflow</button>
+    <!-- <button class="btn btn-primary random_delay margin-but" id="random_delay">Random Delay</button> -->
     <!-- <button class="btn btn-primary get_data margin-but" id="get_data">Get data</button> -->
     <button id="myBtn" class="btn btn-primary margin-but" onclick="Display_logs()">Display Logs</button>
+    <button class="btn btn-primary random_delay margin-but" id="random_delay">Random Delay</button>
+
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -370,10 +490,13 @@
     <span class="choose-file">	
         <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">	
             <input class="btn btn-primary margin-but" type="file" name="file" />	
-            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>	
+            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>
+            	
         </form>
-    <button type="button" class="btn btn-link link-button"id="text_submit">Upload file         </button>
-    </span>	
+    <button type="button" class="btn btn-link link-button"id="text_submit">        </button>
+
+    </span>
+    <!-- <button class="btn btn-primary random_delay margin-but" id="random_delay">Random Delay</button> -->
     <!-- <button class="btn btn-primary margin-but" id="text_submit">Upload File</button> -->
     <span class="priority-user">
         <label for="priority_user">Priority User: </label><input id="priority_user" type="text">
@@ -416,6 +539,21 @@
     </div>
 
     <h4 class="userfinish" id="userfinish"></h4>
+    <p id="greentask1"></p>
+    <p id="redtask1"></p>
+    <p id="greentask2"></p>
+    <p id="redtask2"></p>
+    <p id="greentask3"></p>
+    <p id="redtask3"></p>
+    <p id="greentask4"></p>
+    <p id="redtask4"></p>
+    <p id="greentask5"></p>
+    <p id="redtask5"></p>
+    <p id="greentask6"></p>
+    <p id="redtask6"></p>
+    <p id="greentask7"></p>
+    <p id="redtask7"></p>
+
     <!-- <h4 class="query1_data" id="query1_data">wot</h4> -->
     <!-- <h4 class="query2_data" id="query2_data">{{query2_data}}</h4> -->
     <span id="operator_properties" style="display: block;" class="create-task">
@@ -429,10 +567,28 @@
             <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>	
         </form>
     </span>	 -->
-        <h6>	
-            <div id="display_time" class="time"></div>	
-        </h6>	
-    
+    <h6>
+        <h6>
+            <h6>
+                <h6>
+                    <h6>
+                        <h6>
+                            <h6>
+                                <div id="display_time" class="time"></div>
+                                <div id="display_time" class="time"></div>
+                                <div id="display_time" class="time"></div>
+                                <div id="display_time" class="time"></div>
+                                <div id="display_time" class="time"></div>
+                                <div id="display_time" class="time"></div>
+                                <div id="display_time" class="time"></div>
+                            </h6>
+                        </h6>
+                    </h6>
+                </h6>
+            </h6>
+        </h6>
+    </h6>
+
 
 
 
@@ -812,6 +968,18 @@
             $('#query2_submit').click(Query2);
 
 
+            function Random_Delay() {
+
+                $.ajax({
+                        type: "POST",
+                        url: 'http://localhost:5000/random_delay'
+                    }).done(function() {
+                        console.log('added RANDOM DELAY');
+                    })
+                    // $query1.val() = '';
+            };
+            $('#random_delay').click(Random_Delay);
+
 
             function Submit_text_file() {
                 //Reading the file
@@ -897,6 +1065,29 @@
 
             var taskoper = {}
             var lasttask;
+            var taskusernotexec = {}; //Dict for task as key and list of users not executed it.
+            var usertaskfin = {}; //Dict for maintaining which user has completed which task.
+            var usertext = ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10"];
+            var tasknametonum = {}; //Dict for task name as key and a number as value
+            var numtoid = {}; //Dict for num as key and id as value
+            var tasknum = 1;
+
+            numtoid[1] = "greentask1";
+            numtoid[2] = "redtask1";
+            numtoid[3] = "greentask2";
+            numtoid[4] = "redtask2";
+            numtoid[5] = "greentask3";
+            numtoid[6] = "redtask3";
+            numtoid[7] = "greentask4";
+            numtoid[8] = "redtask4";
+            numtoid[9] = "greentask5";
+            numtoid[10] = "redtask5";
+            numtoid[11] = "greentask6";
+            numtoid[12] = "redtask6";
+            numtoid[13] = "greentask7";
+            numtoid[14] = "redtask7";
+
+
 
             function create_task(name1, time1) {
                 $.ajax({
@@ -911,6 +1102,14 @@
                     change_title_task(operatorId, name1, time1);
                     taskoper[name1] = operatorId;
                     lasttask = name1;
+                    tasknametonum[name1] = [];
+                    tasknametonum[name1].push(tasknum);
+                    tasknum++;
+                    tasknametonum[name1].push(tasknum);
+                    tasknum++;
+                    console.log("This is tasknameto num", tasknametonum);
+                    taskusernotexec[name1] = [];
+                    usertaskfin[name1] = [];
                 });
             }
 
@@ -954,7 +1153,7 @@
             //-----------------------------------------
             //--- create operator button
             //--- start
-
+            var tasknum1 = 1;
             var posoftask = 0;
             $flowchart.parent().siblings('.create_operator').click(function() {
                 $.ajax({
@@ -965,9 +1164,20 @@
                     var operatorData = operator_data['operatorData'];
                     var name1 = operatorData['properties']['title'].split(" ");
                     $flowchart.flowchart('createOperator', operatorId, operatorData);
-                    console.log("Here is what we got", name1[0], operatorId);
+                    //console.log("Here is what we got", name1[0], operatorId);
                     taskoper[name1[0]] = operatorId;
+                    //console.log("This is tasktooper", taskoper);
                     lasttask = name1[0];
+                    taskusernotexec[name1[0]] = [];
+                    usertaskfin[name1[0]] = [];
+                    tasknametonum[name1[0]] = [];
+                    tasknametonum[name1[0]].push(tasknum1);
+                    tasknum1++;
+                    tasknametonum[name1[0]].push(tasknum1);
+                    tasknum1++;
+                    console.log("This is tasknameto num", tasknametonum);
+
+                    //console.log("this is taskusernotexec", taskusernotexec);
                 });
             });
             //--- end
@@ -1047,6 +1257,14 @@
             let user = 0;
             var indexoftasks = 0;
             var userendisp = '';
+            waitingdict = {};
+            var uc = 0;
+            //For waiting tasks
+            //var wait = "";
+            //var username = "";
+            //var taskin = "";
+            //var work;
+            //var tasktime = {}
 
             function Execute_Workflow() {
                 $.ajax({
@@ -1061,22 +1279,37 @@
                         source.close();
                     }
 
-
+                    console.log("This is e", e);
                     var d = new Date();
                     var s = d.toUTCString();
-                    $.post("http://localhost:5000/writetofile", {
-                        javascript_data: e.data
-                    });
-                    if (e.data == ' ') {
-                        displaydata = displaydata + e.data + "<br />";
 
+                    if (e.data[0] == "S" || e.data[0] == "F") {
+                        //console.log("Are you here??")
+                        if (e.data == ' ') {
+                            displaydata = displaydata + e.data + "<br />";
+                        } else {
+                            displaydata = displaydata + s + "<br />" + e.data + "<br />";
+
+                        }
+                        $.post("http://localhost:5000/writetofile", {
+                            javascript_data: e.data
+                        });
                     } else {
-                        displaydata = displaydata + s + "<br />" + e.data + "<br />";
-                    }
+                        wait = e.data.split(" ");
+                        username = wait[0];
+                        taskin = wait[1];
 
+                        var userins = username[0] + username[4];
+                        //waitstartuser(taskoper[taskin], username[4], tasktime[currusertask[username]]);
+                        if (taskusernotexec[taskin].indexOf(userins) === -1) {
+                            taskusernotexec[taskin].push(userins);
+                        }
+                        //console.log("Hello im yield", taskusernotexec);
+                    }
+                    // console.log("HIII THIS IS NOT EXECUTE  ", e.nodes);
                     if (disp == 1)
                         document.getElementById("display_data").innerHTML = displaydata;
-                    //document.getElementById("display_data").innerHTML = displaydata;
+
                     var res = e.data.split(" ");
                     console.log(res);
                     if (res[0] == "Started" && res[3] == "Workflow") {
@@ -1087,16 +1320,20 @@
                     }
                     if (res[0] === "Finished" && res[3] === "Workflow") {
                         user--;
+                        uc++;
                         if (user === 0) {
                             startStop();
                         }
+                        if (uc == usercount) {
+                            displayuserdata(usertaskfin, taskusernotexec);
+                            //console.log(usertaskfin);
+                        }
                     }
 
-
+                    displayuserdata(usertaskfin, taskusernotexec);
 
                     if (res[0] == "Started" && res[3] != "Workflow") {
-                        //console.log("You there??")
-                        //Worktasks[taskname] = The position of that task
+
                         if (!(res[3] in Worktasks)) {
                             Worktasks[res[3]] = indexoftasks;
                             indexoftasks++;
@@ -1109,6 +1346,12 @@
                     } else if (res[0] == "Finished" && res[3] != "Workflow") {
                         userend(parseInt(res[10][4]));
                         dict[res[10][4]] = taskoper[res[3]];
+                        usertaskfin[res[3]].push(usertext[parseInt(res[10][4]) - 1]);
+                        const index = taskusernotexec[res[3]].indexOf(usertext[parseInt(res[10][4]) - 1]);
+                        if (index > -1) {
+                            taskusernotexec[res[3]].splice(index, 1);
+                        }
+
                         console.log("This is for delay", dict);
                         if (res[3] == lasttask) {
                             userendisp = userendisp + res[10] + ' finished execution' + "<br />";
@@ -1123,7 +1366,62 @@
                     }
                 }
             }
-            $('#execute_workflow').click(Execute_Workflow);
+            var usercount = 0;
+
+            $('#execute_workflow').click(function() {
+                usercount++;
+                Execute_Workflow();
+            });
+
+            function displayuserdata(usertaskfin, taskusernotexec) {
+                var data = $flowchart.flowchart('getData');
+                var svg = d3.select("#svgtag");
+                var svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                var circidstn = ["task1idc", "task2idc", "task3idc", "task4idc", "task5idc", "task6idc", "task7idc", "task8idc", "task9idc", "task10idc"];
+                var taskidstn = ["task1id", "task2id", "task3id", "task4id", "task5id", "task6id", "task7id", "task8id", "task9id", "task10id"];
+                var i = 0;
+
+                for (var key in taskusernotexec) {
+
+                    svg.append("circle")
+                        .attr("id", circidstn[i])
+                        .attr("cx", data.operators[taskoper[key]].left + 5) //30
+                        .attr("cy", data.operators[taskoper[key]].top + 92) //187
+                        .attr("r", 7)
+                        .attr("stroke", "red")
+                        .attr("stroke-width", 2)
+                        .attr("fill", "red");
+                    var x = taskusernotexec[key].toString();
+                    document.getElementById(numtoid[tasknametonum[key][1]]).style.marginLeft = data.operators[taskoper[key]].left + 30 + "px";
+                    document.getElementById(numtoid[tasknametonum[key][1]]).style.marginTop = data.operators[taskoper[key]].top + 187 + "px";
+                    document.getElementById(numtoid[tasknametonum[key][1]]).innerHTML = x;
+
+                    i++;
+                }
+
+
+                var circidut = ["task1iduc", "task2iduc", "task3iduc", "task4iduc", "task5iduc", "task6iduc", "task7iduc", "task8iduc", "task9iduc", "task10iduc"];
+                var taskidut = ["task1idu", "task2idu", "task3idu", "task4idu", "task5idu", "task6idu", "task7idu", "task8idu", "task9idu", "task10idu"];
+                var i = 0;
+
+                for (var key in usertaskfin) {
+                    svg.append("circle")
+                        .attr("id", circidut[i])
+                        .attr("cx", data.operators[taskoper[key]].left + 5)
+                        .attr("cy", data.operators[taskoper[key]].top + 110) //110
+                        .attr("r", 7)
+                        .attr("stroke", "green")
+                        .attr("stroke-width", 2)
+                        .attr("fill", "green");
+
+                    var x = usertaskfin[key].toString();
+                    console.log("This is id", numtoid[tasknametonum[key][0]], tasknametonum[key][0], tasknametonum[key]);
+                    document.getElementById(numtoid[tasknametonum[key][0]]).style.marginLeft = data.operators[taskoper[key]].left + 30 + "px";
+                    document.getElementById(numtoid[tasknametonum[key][0]]).style.marginTop = data.operators[taskoper[key]].top + 207 + "px";
+                    document.getElementById(numtoid[tasknametonum[key][0]]).innerHTML = x;
+                    i++;
+                }
+            }
 
             function userstart(operatorId, usernum, time) {
                 var circids = ["user1c", "user2c", "user3c", "user4c", "user5c", "user6c", "user7c", "user8c", "user9c", "user10c"];
@@ -1249,6 +1547,8 @@
             tojson
         };
         if (false) console.log('remove lint unused warning', defaultFlowchartData);
+
+        //var defaultFlowchartData = $.getJSON("http://127.0.0.1:5000/start"); var defaultFlowchartData = { data, tojson }; if (false) console.log('remove lint unused warning', defaultFlowchartData);
     </script>
 </body>
 

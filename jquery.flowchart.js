@@ -684,6 +684,7 @@ jQuery(function($) {
 
             this.data.operators[operatorId] = operatorData;
             this.data.operators[operatorId].internal.els = fullElement;
+            // this.data.operators[operatorId].internal.els.operator.width() = this.data.operators[operatorId].internal.els.operator.width() + 70;
 
             if (operatorId == this.selectedOperatorId) {
                 this._addSelectedClass(operatorId);

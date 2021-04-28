@@ -1,0 +1,6 @@
+I want to make a @workflow: Library Management.I want to execute @User:5. 
+Each user should execute @Time: 1,7,9,10,12.
+The first @Task: Show_ID and @Time: 5 sec. 
+Next @Task: Check_catalog and @Time: 7 sec.
+Next @Task: Find_book and @Time: 4 sec.
+Final task is @Task: Get_book and @Time: 2 sec.

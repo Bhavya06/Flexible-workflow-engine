@@ -1,0 +1,7 @@
+I want to make a @workflow: Covid Vaccination Drive. I want to execute @User:4. 
+Each user should execute @Time: 1,2,3,4.
+The first @Task: Registeration and @Time: 9 sec. 
+Second @Task: Check_Vitals and @Time: 15 sec.
+Next @Task: Counter1 and @Time: 18 sec
+OR @Task: Counter2 and @Time: 16 sec.
+Final task is @Task: Collect_Reciept and @Time: 18 sec.

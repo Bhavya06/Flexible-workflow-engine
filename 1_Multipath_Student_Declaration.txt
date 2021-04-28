@@ -1,0 +1,6 @@
+I want to make a @workflow: Student Declaration Form Submission. I want to execute @User:4. 
+Each user should execute @Time: 1,2,3,4.
+The first @Task: Parents_sign and @Time: 5 sec. 
+Next @Task: HOD1_sign and @Time: 7 sec
+OR @Task: HOD2_sign and @Time: 6 sec.
+Final task is @Task: Submit_Dept and @Time: 4 sec.
