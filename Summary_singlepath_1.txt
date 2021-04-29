@@ -1,7 +1,0 @@
-I want to make a @workflow: Graduation Certificate Collection.I want to execute @User:4. 
-The first @Task: Show_ID and @Time: 5 sec. 
-Next @Task: Submit_SOP and @Time: 10 sec.
-Next @Task: Pay_fee and @Time: 13 sec.
-Next @Task: Grade_Card and @Time: 6 sec.
-Next @Task: Degree_Cert and @Time: 8 sec.
-Final task is @Task: Migration_Cert and @Time: 5 sec.
