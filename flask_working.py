@@ -289,7 +289,7 @@ def add_operator():
     global taskposleft
     operatorId = 'created_operator_' + str(operatorI)
     operatorData = {
-        "top": 130,
+        "top": 170,
         "left": 20 + taskposleft,
         "properties": {
             "title": 'Task' + str(operatorI + 1),

@@ -276,6 +276,22 @@
             font-family: "Times New Roman", Times, serif;
         }
         
+        #redlegend {
+            top: 110px;
+            margin-left: 50px;
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        #greenlegend {
+            top: 128px;
+            margin-left: 50px;
+            font-size: 18px;
+            position: absolute;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
         .userfinish {
             top: 120px;
             margin-left: 1300px;
@@ -489,9 +505,8 @@
     </div>
     <span class="choose-file">	
         <form action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">	
-            <input class="btn btn-primary margin-but" type="file" name="file" />	
-            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>
-            	
+            <input class="btn btn-primary margin-but" type="file" name="file" />
+            <input class="choose-file-submit btn btn-primary margin-but" type="submit"/>   	
         </form>
     <button type="button" class="btn btn-link link-button"id="text_submit">        </button>
 
@@ -553,6 +568,9 @@
     <p id="redtask6"></p>
     <p id="greentask7"></p>
     <p id="redtask7"></p>
+
+    <h4 id="greenlegend"></h4>
+    <h4 id="redlegend"></h4>
 
     <!-- <h4 class="query1_data" id="query1_data">wot</h4> -->
     <!-- <h4 class="query2_data" id="query2_data">{{query2_data}}</h4> -->
@@ -1374,9 +1392,32 @@
             });
 
             function displayuserdata(usertaskfin, taskusernotexec) {
-                var data = $flowchart.flowchart('getData');
                 var svg = d3.select("#svgtag");
-                var svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                svg.append("circle")
+                    .attr("id", "reddisp")
+                    .attr("cx", 20) //30
+                    .attr("cy", 20) //187
+                    .attr("r", 7)
+                    .attr("stroke", "red")
+                    .attr("stroke-width", 2)
+                    .attr("fill", "red");
+
+                document.getElementById("redlegend").innerHTML = "Users yet to execute";
+
+                svg.append("circle")
+                    .attr("id", "greendisp")
+                    .attr("cx", 20)
+                    .attr("cy", 38) //110
+                    .attr("r", 7)
+                    .attr("stroke", "green")
+                    .attr("stroke-width", 2)
+                    .attr("fill", "green");
+
+                document.getElementById("greenlegend").innerHTML = "Users that have finished execution";
+
+                var data = $flowchart.flowchart('getData');
+                //var svg = d3.select("#svgtag");
+                //var svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 var circidstn = ["task1idc", "task2idc", "task3idc", "task4idc", "task5idc", "task6idc", "task7idc", "task8idc", "task9idc", "task10idc"];
                 var taskidstn = ["task1id", "task2id", "task3id", "task4id", "task5id", "task6id", "task7id", "task8id", "task9id", "task10id"];
                 var i = 0;
